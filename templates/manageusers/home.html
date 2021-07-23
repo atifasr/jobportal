@@ -1,0 +1,55 @@
+{% extends "base/base.html" %} {% load static %} {% block css %}
+
+<link rel="stylesheet" href="{% static 'manageusers/home.css' %}" />
+
+{% endblock %} {% block content %} {% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li class="{{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %} {% for val in jobs %}
+
+<div class="row jobs">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="{% url 'jobmanage:job-det' val.id %}">{{val.title}}</a>
+        </h5>
+
+        <h6 class="card-subtitle mb-2 text-muted">{{val.cmpny_name}}</h6>
+        <h5 class="card-title">{{val.salary}}</h5>
+        <p class="card-text">{{val.job_description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+<div class="pagination">
+  <button>page current</button>
+  <a href="/users/get_page/?page_num={{page.next_page_number}}"
+    ><button>next page</button></a
+  >
+  <button value="{{page_num.num_pages}}">{{page_num.num_pages}}</button>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      url: "/users/get_jobs_ajax",
+      type: "GET",
+      contentType: "application/json",
+      dataType: "json",
+      success: function (data) {
+        console.log(data);
+      },
+      error: function (xhr) {
+        console.log(xhr.error);
+      },
+    });
+  });
+</script>
+
+{% endblock %}

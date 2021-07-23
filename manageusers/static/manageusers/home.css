@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap");
+
+.input-group {
+  display: inline;
+}
+
+.input-group-text {
+  width: 2.8em;
+}
+
+.card {
+  border-radius: 2.8em;
+  margin: 0.5em;
+  width: 60vw;
+  cursor: pointer;
+}
+
+.card-title {
+  text-transform: capitalize;
+  font-weight: 900;
+  font-family: "Nunito", sans-serif;
+  font-size: 1.6em;
+}

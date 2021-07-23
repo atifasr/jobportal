@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@700&display=swap");
+body {
+  font-family: "Open Sans Condensed", sans-serif;
+}
+
+.navbar-brand {
+  font-size: 120%;
+}
+
+.navbar > * {
+  font-family: "Open Sans Condensed", sans-serif;
+  font-size: 130%;
+  font-weight: bolder;
+}
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.card_flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.navbar-brand {
+  font-size: 150%;
+}
+
+body {
+  background-color: rgb(214, 210, 210);
+}

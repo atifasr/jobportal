@@ -1,0 +1,22 @@
+.contain {
+  display: flex;
+  flex-direction: column;
+  font-size: 2.2em;
+}
+
+th {
+  border: 2px solid black;
+  text-align: center;
+  font-size: 70%;
+  padding: 0.3em;
+  text-transform: capitalize;
+}
+tr {
+  margin: 3em;
+  font-size: 80%;
+}
+
+td {
+  padding: 0.3em;
+  text-align: center;
+}

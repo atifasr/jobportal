@@ -1,0 +1,10 @@
+{% extends "base/base.html" %} {% block content %} {% for val in applicants %}
+<div class="row">
+  <div class="col-md-8">
+    <div class="descrip" style="display: flex; flex-direction: column">
+      <h1 class="display-6">user applied :{{val.user.first_name}}</h1>
+      <h3>Job post: {{val.job_post}}</h3>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock %}

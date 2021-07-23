@@ -1,0 +1,128 @@
+{% extends "base/base.html"%} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'job_management/manage_applic.css'%}" />
+{% endblock %} {% block content %} {% if manage_applic %}
+
+<h1>Applied applicants</h1>
+
+<table class="contain">
+  <tr>
+    <th>username</th>
+    <th>applied date</th>
+    <th>status</th>
+    <th>job_type</th>
+    <th>job title</th>
+    <th>skills</th>
+    <th>skills req</th>
+  </tr>
+  {% for val in applicants %}
+
+  <tr>
+    <td>
+      <a href="/users/profile_view/?id={{val.user.id}}"
+        >{{val.user.first_name | capfirst }}</a
+      >
+    </td>
+    <td>{{val.apply_date}}</td>
+    <td>
+      <select
+        class="status_select"
+        name="{{val.job_post.title}}"
+        id="{{val.user.id}}"
+      >
+        <option selected="{{val.status}}" style="font-weight: bolder">
+          {{val.status}}
+        </option>
+        <option value="onhold">Onhold</option>
+        <option value="selected">Selected</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </td>
+    <td>
+      <b>{{val.job_post.job_type}}</b>
+    </td>
+    <td>{{val.job_post.title}}</td>
+    <td>
+      <ul>
+        {% for cand_skills in val.user.seekerprofile.seekerskillset_set.all %}
+        <li>{{cand_skills.skill_set.skill_name}}</li>
+        <li>{{cand_skills.skill_level}}</li>
+        {%endfor%}
+      </ul>
+    </td>
+    <td>
+      <ul>
+        {%for job_skills in val.job_post.job_skillset_set.all%}
+        <li>{{job_skills.skill.skill_name}}</li>
+        <li>{{job_skills.skill_level}}</li>
+        {%endfor%}
+      </ul>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<script>
+  let par = document.querySelector(".ajax_list");
+  $(document).ready(function () {
+    $.ajax({
+      url: "/get_applicants/",
+      type: "GET",
+      contentType: "application/json",
+      dataType: "json",
+      success: function (data) {},
+      error: function (error) {
+        console.log(error.status);
+        console.log("calling from error");
+      },
+    });
+  });
+
+  $("body").on("change", ".status_select", function (e) {
+    e.stopPropagation();
+    console.log($(this).val());
+    id = $(this).attr("id");
+    job_title = $(this).attr("name");
+    console.log(id);
+    console.log("working");
+    console.log(job_title);
+    $.ajax({
+      url: "/users/status_change/",
+      type: "GET",
+      contentType: "application/json",
+      dataType: "json",
+      data: {
+        id: id,
+        selected_val: $(this).val(),
+        job_title: job_title,
+      },
+      success: function (data) {
+        console.log(data);
+      },
+      error: function (error) {
+        console.log(error);
+        console.log("calling from error");
+      },
+    });
+  });
+</script>
+
+{% else %}
+
+<table style="font-size: 3vw">
+  <tr>
+    <td><i>selected candidates</i></td>
+  </tr>
+
+  <tr>
+    <td>
+      {% for val in selected_candid%}
+      <b
+        ><a href="/users/profile_view/?id={{val.user.id}}">
+          {{val.user.first_name}}</a
+        >
+      </b>
+      {%endfor%}
+    </td>
+  </tr>
+</table>
+{% endif %} {% endblock %}

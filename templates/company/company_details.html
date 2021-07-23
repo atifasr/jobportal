@@ -1,0 +1,44 @@
+{% extends "base/base.html"%} {% block content %} {% if job_det %}
+<div class="row">
+  <div class="col-md-8">
+    <h1 class="display-3">{{job_det|capfirst }}</h1>
+
+    <div class="descrip" style="display: flex; flex-direction: column">
+      <a href="/users/companydetails/?id={{job_det.cmpny_name.id}}"
+        ><h1 class="display-6">{{job_det.cmpny_name.name}}</h1></a
+      >
+      <p>description :{{job_det.job_description}}</p>
+      <b>Created on :{{job_det.created_date}}</b>
+      <b>salary : {{job_det.salary}}</b>
+
+      <small>{{job_det.job_loc.address}}</small>
+      <small>{{job_det.job_loc.city}}</small>
+      {% if request.user.user_type != 'HR' %} {% if not applied %}
+      <a href="{% url 'jobmanage:apply-job' job_det.id %}">
+        <button class="btn btn-primary">Apply now</button></a
+      >
+      {% else %}
+      <button class="btn btn-success">Already applied</button>
+      {% endif %} {% endif %}
+    </div>
+  </div>
+</div>
+{% else %}
+
+<div class="card" style="width: 18rem">
+  <img
+    class="card-img-top"
+    src="{{cmpny_images.images.url}}"
+    alt="Card image cap"
+  />
+  <div class="card-body">
+    <h5 class="card-title">{{ cmpny.name}}</h5>
+    <p class="card-text">
+      Some quick example text to build on the card title and make up the bulk of
+      the card's content.
+    </p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
+{% endif %} {% endblock %}

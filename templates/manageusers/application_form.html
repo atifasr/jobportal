@@ -1,0 +1,355 @@
+{% extends "base/base.html" %} {% block content %}
+
+<style>
+  .divider-text {
+    position: relative;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .divider-text span {
+    padding: 7px;
+    font-size: 12px;
+    position: relative;
+    z-index: 2;
+  }
+  .divider-text:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    top: 55%;
+    left: 0;
+    z-index: 1;
+  }
+
+  .btn-facebook {
+    background-color: #405d9d;
+    color: #fff;
+  }
+  .btn-twitter {
+    background-color: #42aeec;
+    color: #fff;
+  }
+</style>
+
+<div class="wrap">
+  <link
+    href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    rel="stylesheet"
+    id="bootstrap-css"
+  />
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!------ Include the above in your HEAD tag ---------->
+
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+  />
+
+  <div class="container">
+    <hr />
+    {% if type == 'updatedetail' %}
+
+    <div class="card bg-light">
+      <article class="card-body mx-auto" style="max-width: 400px">
+        <h4 class="card-title mt-3 text-center">Update details</h4>
+
+        <form action="" method="POST">
+          {% csrf_token %}
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input
+              name="first_name"
+              class="form-control"
+              placeholder="First name"
+              type="text"
+              value="{{applicant.first_name}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input
+              name="last_name"
+              class="form-control"
+              placeholder="Last name"
+              type="text"
+              value="{{applicant.last_name}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input
+              name="current_salary"
+              class="form-control"
+              placeholder="Current salary"
+              type="text"
+              value="{{applicant.current_salary}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input
+              name="currency"
+              class="form-control"
+              placeholder="Currency"
+              type="text"
+              value="{{applicant.currency}}"
+            />
+          </div>
+          <div
+            class="form-group input-group"
+            style="display: flex; flex-direction: column"
+          >
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <label for="skill_name">Skill name and level</label>
+            {% for val in skill_names%}
+            <label for="skill_name">{{val.skill_name}}</label>
+            <input
+              name="skill_name"
+              type="checkbox"
+              value="{{val.skill_name}}"
+            />
+
+            <select name="skill_level" id="">
+              <option value="beginner">Beginner</option>
+              <option value="intermdeiate">Intermediate</option>
+              <option value="advance">Advanced</option>
+            </select>
+            {% endfor %}
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update profile
+            </button>
+          </div>
+          <!-- form-group// -->
+        </form>
+      </article>
+    </div>
+    {% elif type == 'updateeducation' %}
+
+    <div class="card bg-light">
+      <article class="card-body mx-auto" style="max-width: 400px">
+        <h4 class="card-title mt-3 text-center">Update Education details</h4>
+
+        <form action="" method="POST">
+          {% csrf_token %}
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input
+              name="degree_name"
+              class="form-control"
+              placeholder="certificate_degree_name"
+              type="text"
+              value="{{applicant.certificate_degree_name}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input
+              name="major"
+              class="form-control"
+              placeholder="major"
+              type="text"
+              value="{{applicant.major}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <label for="ins_university_name"> University name</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+
+            <input
+              name="ins_university_name"
+              class="form-control"
+              placeholder="institute_university_name"
+              type="text"
+              value="{{applicant.institute_university_name}}"
+            />
+          </div>
+
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <label for="starting_date">starting_date</label>
+            <input
+              name="starting_date"
+              class="form-control"
+              placeholder="starting_date"
+              type="date"
+              value="{{applicant.starting_date}}"
+            />
+            <label for="completion_date">completion_date</label>
+            <input
+              name="completion_date"
+              class="form-control"
+              placeholder="completion_date"
+              type="date"
+              value="{{applicant.completion_date}}"
+            />
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update profile
+            </button>
+          </div>
+          <!-- form-group// -->
+        </form>
+      </article>
+    </div>
+
+    {% else %}
+
+    <div class="card bg-light">
+      <article class="card-body mx-auto" style="max-width: 400px">
+        <h4 class="card-title mt-3 text-center">Update Experience details</h4>
+
+        <form action="" method="POST">
+          {% csrf_token %}
+          <div class="form-group input-group">
+            <label for="job_title">Job title</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+
+            <input
+              name="job_title"
+              class="form-control"
+              placeholder="certificate_degree_name"
+              type="text"
+              value="{{applicant.job_title}}"
+            />
+          </div>
+
+          <div class="form-group input-group">
+            <label for="company_name"> Company name </label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+
+            <input
+              name="company_name"
+              class="form-control"
+              placeholder="major"
+              type="text"
+              value="{{applicant.company_name}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <label for="job_location_state"> Job location state</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+
+            <input
+              name="job_location_state"
+              class="form-control"
+              placeholder="institute_university_name"
+              type="text"
+              value="{{applicant.job_location_state}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <label for="job_location_city"> Job location city</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+
+            <input
+              name="job_location_city"
+              class="form-control"
+              placeholder="institute_university_name"
+              type="text"
+              value="{{applicant.job_location_city}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <label for="job_location_country"> Job location country</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+
+            <input
+              name="job_location_country"
+              class="form-control"
+              placeholder="institute_university_name"
+              type="text"
+              value="{{applicant.job_location_country}}"
+            />
+          </div>
+          <div class="form-group input-group">
+            <label for="description"> Job description</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Text</label>
+              <textarea
+                id="my-textarea"
+                class="form-control"
+                name="description"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <label for="starting_date">starting_date</label>
+            <input
+              name="start_date"
+              class="form-control"
+              placeholder="starting_date"
+              type="date"
+              value="{{applicant.starting_date}}"
+            />
+            <label for="completion_date">completion_date</label>
+            <input
+              name="end_date"
+              class="form-control"
+              placeholder="completion_date"
+              type="date"
+              value="{{applicant.completion_date}}"
+            />
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update profile
+            </button>
+          </div>
+          <!-- form-group// -->
+        </form>
+      </article>
+    </div>
+
+    {% endif %}
+    <!-- card.// -->
+  </div>
+  <!--container end.//-->
+</div>
+
+{% endblock %}

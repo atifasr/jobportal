@@ -1,0 +1,235 @@
+{% extends "base/base.html" %} {% block content %}
+
+<style>
+  .contain {
+    display: flex;
+    justify-content: center;
+  }
+</style>
+
+<script>
+  $("#c_website").hide();
+</script>
+
+{% if contxt == 'company_contxt' %}
+<div class="contain">
+  <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset>
+      <div id="legend">
+        <legend class="">Register a Company</legend>
+      </div>
+      <div class="stream_choices">
+        <label class="control-label" for="stream_name">stream</label>
+        <select name="b_stream" id="">
+          {% for val in b_stream %}
+          <option value="{{val.buisness_stream_name}}">
+            {{val.buisness_stream_name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="c_name">Company name</label>
+        <div class="controls">
+          <input
+            type="text"
+            id="c_name"
+            name="c_name"
+            placeholder=""
+            class="input-xlarge"
+          />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- E-mail -->
+        <label class="control-label" for="c_descrip">Company description</label>
+        <div class="controls">
+          <textarea name="c_descrip" id="" cols="30" rows="10"></textarea>
+          <p class="help-block">
+            Please provide some insight about the company
+          </p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- Password-->
+        <label class="control-label" for="estab_date">Establishment Date</label>
+        <div class="controls">
+          <input name="estab_date" type="date" name="estab_date" />
+        </div>
+      </div>
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="company_website"
+          >company_website</label
+        >
+        <div class="controls">
+          <input
+            type="url"
+            id="c_website"
+            name="company_website"
+            placeholder=""
+          />
+        </div>
+        <div class="controls">
+          <label for="company_image">Company image</label>
+          <input
+            type="file"
+            id="image"
+            name="company_image"
+            placeholder=""
+            class="input-xlarge"
+          />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- Button -->
+        <div class="controls">
+          <button class="btn btn-success" type="submit">Register</button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+{% else %}
+<div class="contain">
+  <form class="form-horizontal" action="" method="POST">
+    {% csrf_token %}
+    <fieldset>
+      {% if update %}
+      <div id="legend">
+        <legend class="display-2">Update Job details</legend>
+      </div>
+      {% else %}
+      <div id="legend">
+        <legend class="display-2">Create a Job Post</legend>
+      </div>
+      {% endif %}
+      <div class="stream_choices">
+        <label class="control-label" for="Job company">Job Company</label>
+        <select name="company_name" id="">
+          {% for val in company %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Username -->
+
+      <div class="control-group">
+        <fieldset
+          style="
+            display: flex;
+            flex-direction: column;
+            border: 0.8px solid black;
+            border-radius: 3.3px;
+            padding: 3px;
+          "
+        >
+          <legend>Job Location</legend>
+          <label for="address">Street address</label>
+          <textarea name="address">{{val.job_loc.address}}</textarea>
+          <label for="city">City</label>
+          <input type="text" name="city" value="{{val.job_loc.city}}" />
+          <label for="state">State</label>
+          <input type="text" name="state" value="{{val.job_loc.state}}" />
+          <label for="country">Country</label>
+          <input type="text" name="country" value="{{val.job_loc.country}}" />
+          <label for="zip">Zip</label>
+          <input type="text" name="zip" value="{{val.job_loc.zip}}" />
+        </fieldset>
+      </div>
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="job_title">job_title</label>
+        <div class="controls">
+          <input type="text"
+          id=""
+          name="job_title"
+          placeholder="Job Type"
+          class="input-xlarge">
+        </div>
+      </div>
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="job_skill_name">Job skill and level</label>
+        <div class="controls" style="display: flex; flex-direction: column;">
+          
+            {% for val in skills_req %}
+            
+            <input type="checkbox" name="job_skill_name[]" value="{{val.skill_name}}">{{val.skill_name}}</input type="checkbox">
+            <select name="job_skill_level[]">
+              <option value="beginner">beginner</option>
+              <option value="intermediate">intermediate</option>
+              <option value="expert">expert</option>
+            </select>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+        
+
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="job_type"></label>
+        <div class="controls">
+          <label class="control-label" for="job_type">
+            {%if val%}{{val.job_type}} {% else %}Job type {%endif%} </label
+          ><input
+            type="text"
+            id="c_name"
+            name="job_type"
+            placeholder="Job Type"
+            class="input-xlarge"
+          />
+        </div>
+      </div>
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="job_tag">Job Tag</label>
+        <div class="controls">
+          <input
+            type="text"
+            id=""
+            name="job_tag"
+            placeholder="job_tag"
+            class="input-xlarge"
+          />
+        </div>
+      </div>
+      
+      
+
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="job_descrip">Job Description</label>
+        <div class="controls">
+          <textarea name="job_descrip" id="" cols="30" rows="10">
+{{val.job_description}}</textarea
+          >
+        </div>
+      </div>
+      <div class="control-group">
+        <!-- Username -->
+        <label class="control-label" for="job_descrip">Salary</label>
+        <div class="controls">
+          <input type="number" name="salary" value="{{val.salary}}" />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- Button -->
+        <div class="controls">
+          <button class="btn btn-success">Register</button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+{% endif %} {% endblock %}

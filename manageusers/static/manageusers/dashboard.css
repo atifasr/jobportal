@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@700&display=swap");
+
+.top_bar .btn {
+  width: 12%;
+  font-size: 130%;
+  margin: 0.2%;
+  padding: 3;
+  background-color: rgb(172, 181, 192);
+  border-radius: 2em;
+  border: none;
+  font-family: "Open Sans Condensed", sans-serif;
+}
+
+.top_bar .btn:hover {
+  background-color: rgb(138, 142, 146);
+}
+
+.prof_image {
+  border-radius: 2.5em;
+  width: 30%;
+}
+
+.card {
+  border-radius: 2em;
+}

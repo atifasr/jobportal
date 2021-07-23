@@ -1,0 +1,16 @@
+{% extends 'base/base.html'%} {% block content %}
+
+<div class="prof">
+  <p class="name">{{profile.user.first_name}}</p>
+  <img src="" alt="this image" />
+
+  <div class="exp">
+    {% for val in experiencedetail_set %}
+
+    <p>{{val.company_name}}</p>
+
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

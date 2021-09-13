@@ -16,12 +16,6 @@ from django.conf import settings
 # Create your models here.
 
 
-class Address(models.Model):
-    city = models.CharField(max_length=10)
-    state = models.CharField(max_length=12,blank=True)
-    zip_code = models.CharField(max_length=12,blank=True)
-    street = models.CharField(max_length=255,blank=True)
-
 class UserManager(BaseUserManager):
     def create_user(self, first_name, last_name, username, email, password=None):
         """
@@ -42,7 +36,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password=None):
+    def create_superuser(self, username, email='', password=None):
         user = self.create_user(first_name='', last_name='',
                                 username=username, email=email, password=password)
         user.is_admin = True
@@ -65,14 +59,14 @@ class User(AbstractBaseUser):
     user_type = models.CharField(max_length=255, choices=USER_TYPE,default=JOB_SEEKER)
     gender = models.CharField(max_length=22, choices=[
                               ('Male', 'male'), ('female', 'Female')])
-    contact_no = models.IntegerField()
+    contact_no = models.IntegerField(null=True)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
 
     )
 
-    address = models.ForeignKey(Address,on_delete=models.CASCADE,null=True)
+    
 
     objects = UserManager()
 
@@ -102,6 +96,24 @@ class User(AbstractBaseUser):
         if self.email:
             self.username = self.email.split('@')[0]
         super().save(*args, **kwargs)
+
+
+
+
+
+
+class Address(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    city = models.CharField(max_length=10)
+    state = models.CharField(max_length=12,blank=True)
+    zip_code = models.CharField(max_length=12,blank=True)
+    street = models.CharField(max_length=255,blank=True)
+
+
+
+
+
+
 
 
 # User's last login and apply date information

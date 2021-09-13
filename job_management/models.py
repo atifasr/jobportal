@@ -6,33 +6,13 @@ from django.conf import settings
 
 # Create your models here.
 
-
-class JobType(models.Model):
-    job_type = models.CharField(max_length=255)
-
-    def __str__(self):
-        return str(self.job_type)
-
-
-class JobLocation(models.Model):
-    address = models.TextField()
-    city = models.CharField(max_length=25)
-    state = models.CharField(max_length=25)
-    country = models.CharField(max_length=25)
-    zip = models.CharField(max_length=25)
-
-    def __str__(self):
-        return self.city
-
-
 # model for a Job post
 class JobPost(models.Model):
-    creater = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    job_posters = models.ManyToManyField(
+        settings.AUTH_USER_MODEL)
     title = models.CharField(max_length=255)
-    job_type = models.ForeignKey(
-        JobType, on_delete=models.CASCADE)
-    job_loc = models.ForeignKey(JobLocation, on_delete=models.CASCADE)
+    
+    # Company job post belongs to
     cmpny_name = models.ForeignKey(
         Company, related_name='company', on_delete=models.CASCADE)
     created_date = models.DateField(auto_now_add=True)
@@ -42,6 +22,31 @@ class JobPost(models.Model):
     def __str__(self):
         return str(self.job_type)
 
+    @property
+    def get_jobposters(self):
+        return self.job_posters.all()
+
+
+
+# locations for a particular post
+class JobLocation(models.Model):
+    address = models.TextField()
+    city = models.CharField(max_length=25)
+    state = models.CharField(max_length=25)
+    country = models.CharField(max_length=25)
+    zip = models.CharField(max_length=25)
+    job = models.ForeignKey(JobPost, on_delete=models.CASCADE,null=True)
+    def __str__(self):
+        return self.city
+
+
+class JobType(models.Model):
+    job_type = models.CharField(max_length=255)
+    job = models.ForeignKey(
+        JobPost, on_delete=models.CASCADE,null=True)
+
+    def __str__(self):
+        return str(self.job_type)
 
 # for popular tags
 class JobTag(models.Model):

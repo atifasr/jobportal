@@ -7,7 +7,7 @@ from django.http.response import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, resolve_url
 
 from django.http import request
-from .models import User, UserLog
+from .models import User, UserLog ,Address
 from companyprofile.models import Company
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -59,10 +59,10 @@ def get_page():
         p = Paginator(jobs, 6)
         pag_no = request.GET.get('page_num')
         print(p.num_pages)
-    return render(request, 'manageusers/home.html', context={
-        'jobs': p.page(pag_no).object_list,
-        'page': p,
-    })
+        return render(request, 'manageusers/home.html', context={
+            'jobs': p.page(pag_no).object_list,
+            'page': p,
+        })
 
 
 @csrf_exempt
@@ -77,18 +77,31 @@ def user_reg(request):
         contact_no = request.POST['contact_no']
         password = request.POST.get('password')
         user_type = request.POST.get('user_type')
+        
         print(user_type)
         user = User(gender=gender, email=email, username=username, first_name=first_name,
                     last_name=last_name, date_of_birth=date_of_birth, contact_no=contact_no,user_type=user_type)
         user.set_password(password)
         user.save()
 
-        return redirect('/login/')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        zip_code = request.POST.get('zip_code')
+        address_street = request.POST.getlist('address_street')
 
-    user = User()
-    return render(request, 'manageusers/user_registration.html', context={
-        'user': user
-    })
+        address_obj_list = []
+        for value in address_street:
+            address_obj_list.append(
+                user = user,
+                street = value,
+                city= city,
+                state = state,
+                zip_code =zip_code
+            )
+        Address.objects.bulk_create(address_obj_list)
+
+        return redirect('/login/')
+    return render(request, 'manageusers/user_registration.html')
 
 
 @csrf_exempt

@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.base import Model
 from django.db.models.deletion import CASCADE
+from django.utils import tree
 from manageusers.models import User
 from companyprofile.models import Company
 from job_management.models import Skillset
@@ -13,7 +14,7 @@ class SeekerProfile(models.Model):
     last_name = models.CharField(max_length=255)
     current_salary = models.IntegerField()
     currency = models.CharField(max_length=25)
-    photo = models.ImageField(upload_to='applicants')
+    photo = models.ImageField(upload_to='applicants',blank=True, null=True)
     resume = models.FileField(upload_to='applicants/documents')
 
     def __str__(self):
@@ -48,3 +49,7 @@ class Seekerskillset(models.Model):
 
     class Meta:
         verbose_name = 'Seeker skill set'
+
+
+    def __str__(self):
+        return f"{self.skill_set.skill_name} {self.skill_level}"

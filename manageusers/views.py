@@ -1,3 +1,4 @@
+from copy import error
 from typing import ContextManager
 
 from seekerbuilder.models import SeekerProfile, ExperienceDetail, Seekerskillset
@@ -45,17 +46,10 @@ def get_jobs_ajax(request):
 
 def home(request):
     if request.method == 'GET':
-        jobs = JobPost.objects.all()
-        p = Paginator(jobs, 6)
-        print(p)
-        print(p.page(1).object_list)
-        print(p.page(2).object_list)
-        print(p.num_pages)
-        # print(p.count)
+        jobs = JobPost.objects.all()       
 
         return render(request, 'manageusers/home.html', context={
-            'jobs': p.page(1).object_list,
-            'page': p,
+            'jobs': jobs,
         })
 
 
@@ -75,7 +69,6 @@ def get_page():
 def user_reg(request):
     if request.method == 'POST':
         gender = request.POST.get('gender')
-        print(gender)
         email = request.POST['email']
         username = request.POST['username']
         first_name = request.POST['first_name']
@@ -83,13 +76,14 @@ def user_reg(request):
         date_of_birth = request.POST['date_of_birth']
         contact_no = request.POST['contact_no']
         password = request.POST.get('password')
-
+        user_type = request.POST.get('user_type')
+        print(user_type)
         user = User(gender=gender, email=email, username=username, first_name=first_name,
-                    last_name=last_name, date_of_birth=date_of_birth, contact_no=contact_no)
+                    last_name=last_name, date_of_birth=date_of_birth, contact_no=contact_no,user_type=user_type)
         user.set_password(password)
         user.save()
 
-        return redirect(reverse('manageusers:login'), permanent=True)
+        return redirect('/login/')
 
     user = User()
     return render(request, 'manageusers/user_registration.html', context={
@@ -99,46 +93,36 @@ def user_reg(request):
 
 @csrf_exempt
 def login_(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        print(user)
-        if user is not None:
-            login(request, user=user)
-            log = UserLog(user=user, last_login_date=datetime.now())
-            log.save()
-            print(log)
-            return redirect('users/dashboard')
-        else:
-            return render(request, 'manageusers/login.html', {
-                'title': 'login',
-                'message': 'try again with correctpasscode'
-            })
+    if request.user.is_authenticated:
+        return redirect('/home/')
+    else:
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user=user)
+                log = UserLog(user=user, last_login_date=datetime.now())
+                log.save()
+                return redirect('/dashboard/')
+            else:
+                return redirect('/login/')
     return render(request, 'manageusers/login.html', {
         'title': 'login'
     })
 
-
+# for logging out users
 def log_out(request):
     if request.method == 'GET':
         logout(request)
-        return redirect('../login')
+        return redirect('/login/')
 
+
+# Hr or Seeker Dashboard
 
 def dashboard(request):
-    # using caching to store retrieved data objects
     if request.method == "GET":
-        if cache.get('no_of_company'):
-            print('Date already in cache')
-            no_of_comp = cache.get('no_of_company')
-            print(no_of_comp)
-        else:
-            cache.set('no_of_company', number_cmpy())
-            no_of_comp = cache.get('no_of_company')
-            print('Database accessed')
-            print(no_of_comp)
-
+        no_of_comp = number_cmpy()
         if request.user.user_type == 'HR':
             created_posts = JobPost.objects.filter(creater=request.user)
             companies = Company.objects.all()
@@ -146,7 +130,6 @@ def dashboard(request):
             applicants = JobPostActivity.objects.filter(
                 job_post__creater=request.user)
             recent_ones = applicants.order_by('-apply_date')[:3]
-            print(recent_ones)
             context = {
                 'created_posts': created_posts,
                 'applicants': applicants,
@@ -154,16 +137,30 @@ def dashboard(request):
                 'companies': companies
             }
         else:
-            seeker_profile = SeekerProfile.objects.get(user=request.user)
-            applied_posts = JobPostActivity.objects.filter(user=request.user)
-            recently_applied = applied_posts.order_by('-apply_date')[:5]
+            try:
+                seeker_profile = SeekerProfile.objects.get(user=request.user)
+                applied_posts = JobPostActivity.objects.filter(user=request.user)
+                recently_applied = applied_posts.order_by('-apply_date')[:5]
 
-            seeker_skill = Seekerskillset.objects.filter(
-                seeker__user=request.user)
-            edu_det = ExperienceDetail.objects.filter(
-                profile__user=request.user)
+                seeker_skill = Seekerskillset.objects.filter(
+                    seeker__user=request.user)
+                edu_det = ExperienceDetail.objects.filter(
+                    profile__user=request.user)
+            except ObjectDoesNotExist:
+               
+                if SeekerProfile.DoesNotExist:
+                    print(' No seeker object')
+                    seeker_profile = None
 
-            # print(seeker_profile.photo.url)
+                if JobPostActivity.DoesNotExist:
+                    recently_applied = applied_posts = None
+
+                if Seekerskillset.DoesNotExist:
+                    seeker_skill = None
+                if ExperienceDetail.DoesNotExist:
+
+                    edu_det = None
+
             context = {
                 'seeker_profile': seeker_profile,
                 'applied_posts': applied_posts,
@@ -174,6 +171,9 @@ def dashboard(request):
         return render(request, 'manageusers/dashboard.html', context)
 
 
+
+
+
 def app_form(request):
     if request.method == 'GET':
         pass
@@ -181,20 +181,16 @@ def app_form(request):
 
 
 # user search function for searching jobs
-
-
 def search_func(request):
     if request.method == 'GET':
         filter_srch = request.GET.get('search_text')
         filter_type = request.GET.get('filter')
-        print(filter_type)
         context = {}
 
         if filter_type == 'title':
             print(f'filter is {filter_type}')
             fltrd_obj = JobPost.objects.filter(
                 title__icontains=filter_srch)
-            print(fltrd_obj)
             context['jobs'] = fltrd_obj
             messages.success(request, 'Matching results')
         elif filter_type == 'company_name':
@@ -212,9 +208,6 @@ def search_func(request):
             print(f'filter is {filter_type}')
             context['jobs'] = fltrd_obj
 
-            # messages.error(request, 'No Matching result.')
-            # return redirect('/users')
-
         return render(request, 'manageusers/home.html', context)
 
 
@@ -222,6 +215,7 @@ def search_func(request):
 def get_jobs(request):
     if request.method == 'GET':
         jobs_applied = JobPostActivity.objects.filter(user=request.user)
+        print(jobs_applied)
         context = {
             'jobs_applied': jobs_applied
         }

@@ -1,5 +1,6 @@
 
 
+from django.contrib import messages
 from django.utils import tree
 from companyprofile.models import CompanyImage
 from django.http.response import JsonResponse
@@ -109,14 +110,20 @@ def companydetails(request):
 
 def apply_job(request, job_id):
     if request.method == 'GET':
-        job = JobPost.objects.get(id=job_id)
-        applied_job, created = JobPostActivity.objects.get_or_create(
-            user=request.user, job_post__id=job_id, defaults={
-                'user': request.user,
-                'job_post': job
-            })
+        try:
+            seeker_profile = SeekerProfile.objects.get(user=request.user)
+            job = JobPost.objects.get(id=job_id)
 
-        return redirect('/users/dashboard')
+            applied_job, created = JobPostActivity.objects.get_or_create(
+                user=request.user, job_post__id=job_id, defaults={
+                    'user': request.user,
+                    'job_post': job
+                })
+        except ObjectDoesNotExist:
+            if SeekerProfile.DoesNotExist:
+                messages.add_message(request,messages.INFO,'Kindly add the profile first')
+        
+        return redirect('/dashboard/')
 
 
 def manage_jobs(request):

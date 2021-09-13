@@ -16,6 +16,12 @@ from django.conf import settings
 # Create your models here.
 
 
+class Address(models.Model):
+    city = models.CharField(max_length=10)
+    state = models.CharField(max_length=12,blank=True)
+    zip_code = models.CharField(max_length=12,blank=True)
+    street = models.CharField(max_length=255,blank=True)
+
 class UserManager(BaseUserManager):
     def create_user(self, first_name, last_name, username, email, password=None):
         """
@@ -45,15 +51,18 @@ class UserManager(BaseUserManager):
         return user
 
 
+
+
 class User(AbstractBaseUser):
+    USER_TYPE = [('HR', 'Recuriter'), ('job_seeker', 'Job_seeker')]
+    JOB_SEEKER = 'job_seeker'
     username = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     date_of_birth = models.DateField(default='1995-03-25')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    user_type = models.CharField(max_length=255, choices=[
-        ('HR', 'recuriter'), ('job seeker', 'job_seeker')])
+    user_type = models.CharField(max_length=255, choices=USER_TYPE,default=JOB_SEEKER)
     gender = models.CharField(max_length=22, choices=[
                               ('Male', 'male'), ('female', 'Female')])
     contact_no = models.IntegerField()
@@ -62,6 +71,8 @@ class User(AbstractBaseUser):
         max_length=255,
 
     )
+
+    address = models.ForeignKey(Address,on_delete=models.CASCADE,null=True)
 
     objects = UserManager()
 
@@ -86,6 +97,11 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+    def save(self, *args, **kwargs):
+        if self.email:
+            self.username = self.email.split('@')[0]
+        super().save(*args, **kwargs)
 
 
 # User's last login and apply date information

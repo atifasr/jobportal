@@ -1,21 +1,35 @@
-{% extends "base/base.html" %} {% load static %} {% block css %}
+{% extends "base/base.html" %} 
+
+{% load static %} 
+
+{% block css %}
+
+
 
 <link rel="stylesheet" href="{% static 'manageusers/home.css' %}" />
 
-{% endblock %} {% block content %} {% if messages %}
+{% endblock %} 
+
+{% block content %} 
+
+{% if messages %}
 <ul class="messages">
   {% for message in messages %}
   <li class="{{ message.tags }}">{{ message }}</li>
   {% endfor %}
 </ul>
-{% endif %} {% for val in jobs %}
+{% endif %} 
 
-<div class="row jobs">
-  <div class="col-md-8">
+
+
+<div class="row jobs justify-content-center">
+  <div class="col-md-9">
+    {% for val in jobs %}
+    <a href="{% url 'jobmanage:job-det' val.id %}" class="card-link">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">
-          <a href="{% url 'jobmanage:job-det' val.id %}">{{val.title}}</a>
+          {{val.title}}
         </h5>
 
         <h6 class="card-subtitle mb-2 text-muted">{{val.cmpny_name}}</h6>
@@ -23,10 +37,30 @@
         <p class="card-text">{{val.job_description}}</p>
       </div>
     </div>
+    </a>
+    {% endfor %}
+  </div>
+  <div class="col-md-3">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Drop your email for more job like this!</h5>
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+              </div>
+              
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>
+      </div>
   </div>
 </div>
 
-{% endfor %}
+
+
 <div class="pagination">
   <button>page current</button>
   <a href="/users/get_page/?page_num={{page.next_page_number}}"

@@ -1,4 +1,5 @@
 
+from django.contrib import messages
 from .models import SeekerProfile, ExperienceDetail, EducationDetail
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from manageusers.models import User
@@ -12,7 +13,7 @@ from seekerbuilder.models import *
 
 # for application form
 
-
+# creating or updating user details
 @csrf_exempt
 def update_details(request):
     seeker = get_object_or_404(User, id=request.user.id)
@@ -32,21 +33,30 @@ def update_details(request):
         user.save()
         skill_name = request.POST.getlist('skill_name')
         skill_level = request.POST.getlist('skill_level')
-        # print(f'skill name-> {skill_name} skill level ->{skill_level}')
+
+
         seeker_skll = []
 
 
-        # testing destructing
-        for skill_nme, skill_lvl in zip(skill_name, skill_level):
-            skill_set = Skillset.objects.get(skill_name=skill_nme)
-            seeker_skll.append(Seekerskillset(
-                skill_set=skill_set, skill_level=skill_lvl, seeker=user))
-            print(seeker_skll)
-      
+    #    update details if skill details already exist
+        try:
+            seeker_skills = Seekerskillset.objects.filter(seeker=user)
+            # print(seeker_skills)
+            for skill in seeker_skills:
+                print(skill)
+            # for skill_nme, skill_lvl in zip(skill_name, skill_level):
+            #     seeker_skills.skill_set
+            #     seeker_skills.skill_set
+        except Seekerskillset.DoesNotExist:
+            for skill_nme, skill_lvl in zip(skill_name, skill_level):
+                skill_set = Skillset.objects.get(skill_name=skill_nme)
+                seeker_skll.append(Seekerskillset(
+                    skill_set=skill_set, skill_level=skill_lvl, seeker=user))
 
-        seeker_bulk = Seekerskillset.objects.bulk_create(seeker_skll)
-        print('after insertion',seeker_bulk)
-        return redirect('/users/dashboard')
+            seeker_bulk = Seekerskillset.objects.bulk_create(seeker_skll)
+            print('after insertion',seeker_bulk)
+        messages.add_message(request,messages.INFO,'Details updated'.capitalize())
+        return redirect('/dashboard/')
 
     skill_names = Skillset.objects.all()
     return render(request, 'manageusers/application_form.html', context={
@@ -58,11 +68,15 @@ def update_details(request):
 
 # For updating education details
 def update_edu(request):
-    seeker = get_object_or_404(SeekerProfile, user=request.user)
-    user, created = EducationDetail.objects.get_or_create(profile=seeker, defaults={
-        'starting_date': datetime.datetime.now(),
-        'completion_date': datetime.datetime.now(),
-    })
+    try:
+        seeker = SeekerProfile.objects.get(user=request.user)
+        user, created = EducationDetail.objects.get_or_create(profile=seeker, defaults={
+            'starting_date': datetime.datetime.now(),
+            'completion_date': datetime.datetime.now(),
+        })
+    except ObjectDoesNotExist:
+        user = None
+
     if request.method == 'POST':
         # try:
         #     user = EducationDetail.objects.get(profile=seeker)
@@ -85,11 +99,15 @@ def update_edu(request):
 
 
 def update_exper(request):
-    seeker = get_object_or_404(SeekerProfile, user=request.user)
-    user, created = ExperienceDetail.objects.get_or_create(profile=seeker, defaults={
-        'start_date': datetime.datetime.now(),
-        'end_date': datetime.datetime.now(),
-    })
+    try:
+        seeker = SeekerProfile.objects.get(user=request.user)
+        user, created = ExperienceDetail.objects.get_or_create(profile=seeker, defaults={
+            'start_date': datetime.datetime.now(),
+            'end_date': datetime.datetime.now(),
+        })
+    except ObjectDoesNotExist:
+        user = None
+        pass
     if request.method == 'POST':
         # try:
         #     user = EducationDetail.objects.get(profile=seeker)

@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'seekerbuilder',
     # 'api',
     'job_management',
-    'django_sass',
     'django_memcached',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -135,16 +134,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            'TIMEOUT': 60 * 3,
-        }
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#             'TIMEOUT': 60 * 3,
+#         }
+#     }
+# }
 
 
 # Static files (CSS, JavaScript, Images)

@@ -11,6 +11,7 @@ from django.db.models.deletion import CASCADE
 from django.db.models.expressions import Case
 from django.db.models.fields.related import ForeignKey
 from django.forms import widgets
+from companyprofile.models import Company
 
 from django.conf import settings
 # Create your models here.
@@ -56,9 +57,9 @@ class User(AbstractBaseUser):
     date_of_birth = models.DateField(default='1995-03-25')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,null=True,blank=True)
     user_type = models.CharField(max_length=255, choices=USER_TYPE,default=JOB_SEEKER)
-    gender = models.CharField(max_length=22, choices=[
-                              ('Male', 'male'), ('female', 'Female')])
+    gender = models.CharField(max_length=22,blank=True,null=True)
     contact_no = models.IntegerField(null=True)
     email = models.EmailField(
         verbose_name='email address',

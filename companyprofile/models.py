@@ -1,22 +1,15 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
+from django.utils import tree
 
 # Create your models here.
 
 
-class BuisnessStream(models.Model):
-    buisness_stream_name = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = 'BuisnessStream'
-
-    def __str__(self):
-        return self.buisness_stream_name
 
 
 # creating company model depening on business streams
 class Company(models.Model):
-    stream = models.ForeignKey(BuisnessStream, on_delete=models.CASCADE)
+    
     name = models.CharField(max_length=255)
     prof_description = models.TextField()
     estab_date = models.DateTimeField()
@@ -27,6 +20,19 @@ class Company(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+
+
+class BuisnessStream(models.Model):
+    buisness_stream_name = models.CharField(max_length=255)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,null=True)
+
+    class Meta:
+        verbose_name = 'BuisnessStream'
+
+    def __str__(self):
+        return self.buisness_stream_name
 
 
 class CompanyImage(models.Model):

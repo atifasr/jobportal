@@ -12,10 +12,10 @@ class SeekerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    current_salary = models.IntegerField()
-    currency = models.CharField(max_length=25)
-    photo = models.ImageField(upload_to='applicants',blank=True, null=True)
-    resume = models.FileField(upload_to='applicants/documents')
+    current_salary = models.IntegerField(blank=True,null=True)
+    currency = models.CharField(max_length=25,blank=True,null=True)
+    photo = models.ImageField(upload_to='applicants/profile_pictures',blank=True, null=True)
+    resume = models.FileField(upload_to='applicants/documents',blank=True)
 
     def __str__(self):
         return self.user.first_name

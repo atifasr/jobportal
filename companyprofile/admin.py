@@ -6,7 +6,7 @@ from .models import *
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('stream', 'name',
+    list_display = ( 'name',
                     'prof_description', 'estab_date', 'company_website')
 
 

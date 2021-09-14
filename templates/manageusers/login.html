@@ -2,16 +2,35 @@
 
 {% load static %}
 
+{% block title %}
+  login
+{% endblock  %}
+
 {% block content %}
 
 
 <div class="row justify-content-center align-items-center">
   <div class="col-md-6 my-3">
+    {% if messages %}
+      
+          {% for message in messages %}
+        
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Login error!</strong> {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              {% endif %}      
+          {% endfor %}
 
+      {% endif %}
 
     <div class="form-row justify-content-center form-container">
       <div class="col-md-4">
         <form action="{% url 'manageusers:login' %}" method="POST">
+          {% csrf_token %}
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">username</label>
             <input name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">

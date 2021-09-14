@@ -157,6 +157,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'manageusers' / 'static',
     BASE_DIR / 'job_management' / 'static',
+    BASE_DIR / 'seekerbuilder' / 'static',
 ]
 
 

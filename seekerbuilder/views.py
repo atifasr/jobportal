@@ -1,4 +1,5 @@
 
+from manageusers.models import Address
 from django.contrib import messages
 from .models import SeekerProfile, ExperienceDetail, EducationDetail
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
@@ -16,51 +17,87 @@ from seekerbuilder.models import *
 # creating or updating user details
 @csrf_exempt
 def update_details(request):
-    seeker = get_object_or_404(User, id=request.user.id)
     if request.method == "POST":
-
+        curr_user = User.objects.get(id= request.user.id)
         # seeker profile insertion if there is no data present else update
         try:
             user = SeekerProfile.objects.get(user=request.user)
         except (ObjectDoesNotExist):
             print('from exception')
             user = SeekerProfile()
-        user.user = seeker
-        user.first_name = request.POST['first_name']
-        user.last_name = request.POST['last_name']
-        user.current_salary = request.POST['current_salary']
-        user.currency = request.POST['currency']
-        user.save()
-        skill_name = request.POST.getlist('skill_name')
-        skill_level = request.POST.getlist('skill_level')
+        
+        # updating users profile
+        curr_user.first_name = request.POST['first_name']
+        curr_user.last_name = request.POST['last_name']
+        curr_user.contact_no = request.POST.get('contact_no')
+        curr_user.date_of_birth = request.POST.get('date_of_birth')
 
+        curr_user.save()
 
-        seeker_skll = []
+        # updating Seekers profile
+        user.user = curr_user
+        user.first_name = curr_user.first_name
+        user.last_name = curr_user.last_name
+        user.resume = request.FILES.get('resume')
+        user.photo = request.FILES.get('photo')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        zip_code = request.POST.get('zip_code')
+        address_street = request.POST.getlist('address_street')
+        
 
-
-    #    update details if skill details already exist
         try:
-            seeker_skills = Seekerskillset.objects.filter(seeker=user)
-            # print(seeker_skills)
-            for skill in seeker_skills:
-                print(skill)
-            # for skill_nme, skill_lvl in zip(skill_name, skill_level):
-            #     seeker_skills.skill_set
-            #     seeker_skills.skill_set
-        except Seekerskillset.DoesNotExist:
-            for skill_nme, skill_lvl in zip(skill_name, skill_level):
-                skill_set = Skillset.objects.get(skill_name=skill_nme)
-                seeker_skll.append(Seekerskillset(
-                    skill_set=skill_set, skill_level=skill_lvl, seeker=user))
+            user_address = Address.objects.filter(user = curr_user)
+            for index,address in enumerate(address_street):
+                user_address[index].street = address
+                user_address[index].city = city
+                user_address[index].zip_code = zip_code
+                user_address[index].state = state
+                user_address[index].save()
+        except Address.DoesNotExist:
+            address_obj_list = []
+            for value in address_street:
+                address_obj_list.append(Address(
+                    user = curr_user,
+                    street = value,
+                    city= city,
+                    state = state,
+                    zip_code =zip_code
+                )
+                )
+            Address.objects.bulk_create(address_obj_list)
+        
+        user.save()
 
-            seeker_bulk = Seekerskillset.objects.bulk_create(seeker_skll)
-            print('after insertion',seeker_bulk)
+        # skill_name = request.POST.getlist('skill_name')
+        # skill_level = request.POST.getlist('skill_level')
+
+
+        # seeker_skll = []
+
+
+    # #    update details if skill details already exist
+    #     try:
+    #         seeker_skills = Seekerskillset.objects.filter(seeker=user)
+    #         # print(seeker_skills)
+    #         for skill in seeker_skills:
+    #             print(skill)
+    #         # for skill_nme, skill_lvl in zip(skill_name, skill_level):
+    #         #     seeker_skills.skill_set
+    #         #     seeker_skills.skill_set
+    #     except Seekerskillset.DoesNotExist:
+    #         for skill_nme, skill_lvl in zip(skill_name, skill_level):
+    #             skill_set = Skillset.objects.get(skill_name=skill_nme)
+    #             seeker_skll.append(Seekerskillset(
+    #                 skill_set=skill_set, skill_level=skill_lvl, seeker=user))
+
+    #         seeker_bulk = Seekerskillset.objects.bulk_create(seeker_skll)
+    #         print('after insertion',seeker_bulk)
         messages.add_message(request,messages.INFO,'Details updated'.capitalize())
         return redirect('/dashboard/')
 
     skill_names = Skillset.objects.all()
     return render(request, 'manageusers/application_form.html', context={
-        'applicant': seeker,
         'type': 'updatedetail',
         'skill_names': skill_names
     })

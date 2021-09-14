@@ -70,16 +70,16 @@ def user_reg(request):
     if request.method == 'POST':
         gender = request.POST.get('gender')
         email = request.POST['email']
-        username = request.POST['username']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
-        date_of_birth = request.POST['date_of_birth']
+        date_of_birth = request.POST.get('date_of_birth')
+        print(date_of_birth)
         contact_no = request.POST['contact_no']
         password = request.POST.get('password')
         user_type = request.POST.get('user_type')
         
         print(user_type)
-        user = User(gender=gender, email=email, username=username, first_name=first_name,
+        user = User(gender=gender, email=email, first_name=first_name,
                     last_name=last_name, date_of_birth=date_of_birth, contact_no=contact_no,user_type=user_type)
         user.set_password(password)
         user.save()
@@ -88,15 +88,19 @@ def user_reg(request):
         state = request.POST.get('state')
         zip_code = request.POST.get('zip_code')
         address_street = request.POST.getlist('address_street')
-
+        print(user)
+        print(state)
         address_obj_list = []
+        print(address_obj_list)
         for value in address_street:
-            address_obj_list.append(
+            print('inside loop')
+            address_obj_list.append(Address(
                 user = user,
                 street = value,
                 city= city,
                 state = state,
                 zip_code =zip_code
+            )
             )
         Address.objects.bulk_create(address_obj_list)
 
@@ -107,18 +111,22 @@ def user_reg(request):
 @csrf_exempt
 def login_(request):
     if request.user.is_authenticated:
-        return redirect('/home/')
+        return redirect('/')
     else:
         if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            print(username)
+            print(password)
+            user = authenticate(request,username=username, password=password)
+            print(user)
             if user is not None:
                 login(request, user=user)
                 log = UserLog(user=user, last_login_date=datetime.now())
                 log.save()
                 return redirect('/dashboard/')
             else:
+                messages.add_message(request,messages.WARNING,'Check username or password!')
                 return redirect('/login/')
     return render(request, 'manageusers/login.html', {
         'title': 'login'

@@ -6,7 +6,6 @@
 
 {% block content %}
 
-<h3 class="display-3">Hi! {{user.first_name}}</h3>
 {% if user.user_type == 'HR' %}
 
 <div name="recruiter" class="row recruiter container-fluid">
@@ -93,28 +92,23 @@
 {% endif %}
 
 <div class="row justify-content-center" name="jobseeker">
-  <p>{{user.user_type}}</p>
 
-
-  <div class="row top_bar">
+  <div class="row top_bar my-3">
     <div class="col-md-12">
 
-      <a href="{% url 'seekerbuilder:app-det' %} "
-      ><button class="btn btn-primary">Update profile</button></a
-        >
+      <a href="{% url 'seekerbuilder:app-det' %} "><button class="btn btn-primary">Update profile</button></a>
 
         <a href="{% url 'seekerbuilder:update-edu' %} " value="2">
           <button class="btn btn-primary">Education detail</button>
         </a>
 
-        <a href="{% url 'seekerbuilder:update-exper' %} " value="3">
+        <a href="{% url 'seekerbuilder:update-exper' %}" value="3">
           <button class="btn btn-primary">Update experience</button>
         </a>
         <a href="{% url 'manageusers:get-jobs' %} " value="3">
           <button class="btn btn-primary">
-            Jobs applied for<span class="badge badge-light"
-              >{{applied_posts.count}}</span
-            >
+            Jobs applied for
+            <span class="badge badge-light">{{applied_posts.count}}</span>
           </button>
     </a>
       
@@ -122,49 +116,64 @@
     
   </div>
   <div class="row">
-  <div class="col-md-6">
-
-
-    <table class="table">
-      <thead>
-        <tr>
-          <th colspan="2">
-            Profile details
-          </th>
-        </tr>
-       
-      </thead>
-      <tbody>
-        <tr>
-        
-          <td><h1>{{seeker_profile.user.firstname}}</h1></td>
+  <div class="col-6">
+    
+    <div class="card my-3">
+      <div class="card-body">
+        <h5 class="card-title">
       
-        </tr>
-        <tr>
-          
-          <td>Resume : {{seeker_profile.resume}}</td>
-         
-        </tr>
-        <tr>
+        </h5>
+
+        <div class="row">
+          <div class="col-12">
+            <h4">{{request.user.first_name}}</h4>
+            <img src="" alt="">
+          </div>
+        </div>
+        <table class="table">
           <thead>
-            <th scope="col">
-              Skills
-            </th>
-            <th scope="col">
-              Skill level
-            </th>
+            <tr>
+              <th colspan="2">
+                Profile details
+              </th>
+            </tr>
+           
           </thead>
-         
-        </tr>
-        {% for skills in seeker_profile.seekerskillset_set.all %}
-        <tr>
-         
-          <td>{{skills.skill_set.skill_name}}</td> <td>{{skills.skill_level}}</td>
+          <tbody>
+            <tr>
+            
+              <td><h1>{{seeker_profile.user.firstname}}</h1></td>
+          
+            </tr>
+            <tr>
+              
+              <td>Resume : {{seeker_profile.resume}}</td>
+             
+            </tr>
+            <tr>
+              <thead>
+                <th scope="col">
+                  Skills
+                </th>
+                <th scope="col">
+                  Skill level
+                </th>
+              </thead>
+             
+            </tr>
+            {% for skills in seeker_profile.seekerskillset_set.all %}
+            <tr>
+             
+              <td>{{skills.skill_set.skill_name}}</td> <td>{{skills.skill_level}}</td>
+           
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
        
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      </div>
+    </div>
+    
     
   </div>
   <div class="col-md-6">

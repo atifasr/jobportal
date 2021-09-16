@@ -17,6 +17,9 @@ class SeekerProfile(models.Model):
     photo = models.ImageField(upload_to='applicants/profile_pictures',blank=True, null=True)
     resume = models.FileField(upload_to='applicants/documents',blank=True)
 
+    class Meta:
+        verbose_name_plural  = "Seekers' profile"
+
     def __str__(self):
         return self.user.first_name
 
@@ -31,6 +34,9 @@ class ExperienceDetail(models.Model):
     job_location_city = models.CharField(max_length=50)
     job_location_country = models.CharField(max_length=60)
     description = models.TextField()
+    
+    class Meta:
+        verbose_name_plural  = "Seekers' experience details"
 
 
 class EducationDetail(models.Model):
@@ -41,15 +47,23 @@ class EducationDetail(models.Model):
     starting_date = models.DateField()
     completion_date = models.DateField()
 
+    class Meta:
+        verbose_name_plural  = "Seekers' education details"
+
 
 class Seekerskillset(models.Model):
-    skill_set = models.ForeignKey(Skillset, on_delete=models.CASCADE)
+    skill_set = models.ManyToManyField(Skillset)
     seeker = models.ForeignKey(SeekerProfile, on_delete=models.CASCADE)
     skill_level = models.CharField(max_length=25)
 
     class Meta:
         verbose_name = 'Seeker skill set'
+        verbose_name_plural  = "Seeker's skills"
 
 
     def __str__(self):
         return f"{self.skill_set.skill_name} {self.skill_level}"
+
+    # @property
+    # def get_seekers_skills(self):
+    #     return self.skillset_set.all()

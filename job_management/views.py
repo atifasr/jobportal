@@ -19,7 +19,7 @@ from schedule import every, repeat
 
 def create_job(request):
     company_ = Company.objects.values_list('name', flat=True)
-    job_skill = Skillset.objects.all()
+    # job_skill = Skillset.objects.all()
     # job_skill_set = Job_Skillset.get_skill_level.display()
 
     if request.method == 'POST':
@@ -27,19 +27,17 @@ def create_job(request):
 
         job_title = request.POST['job_title']
         company_name = request.POST['company_name']
-        compny = get_object_or_404(Company, name__iexact=company_name)
+        company = get_object_or_404(Company, name__iexact=company_name)
         address = request.POST.get('address')
         city = request.POST['city']
         state = request.POST['state']
         country = request.POST['country']
-        zip_ = request.POST['zip']
+        zip_ = request.POST.get('zip_code')
         jobtype = request.POST['job_type']
         salary = request.POST['salary']
-        tag = request.POST.get('job_tag')
 
         # creating jobtype entered by user
         job_type, created = JobType.objects.get_or_create(job_type=jobtype)
-        job_tag, creatd = JobTag.objects.get_or_create(name=tag)
 
         job_loc = JobLocation(address=address, city=city,
                               state=state, country=country, zip=zip_)
@@ -47,10 +45,10 @@ def create_job(request):
 
         job_descrip = request.POST['job_descrip']
 
-        job_skill_ = request.POST.getlist('job_skill_name[]')
-        job_skill_level = request.POST.getlist('job_skill_level[]')
+        job_skill_ = request.POST.getlist('job_skill_level')
+        # job_skill_level = request.POST.getlist('job_skill_level[]')
         job_pst = JobPost(creater=request.user, title=job_title, job_type=job_type, job_loc=job_loc,
-                          cmpny_name=compny, job_description=job_descrip, salary=salary)
+                          cmpny_name=company, job_description=job_descrip, salary=salary)
 
         job_pst.save()
 
@@ -66,7 +64,7 @@ def create_job(request):
     return render(request, 'company/company_entry.html', context={
         'contxt': 'job_contxt',
         'company': company_,
-        'skills_req': job_skill,
+        # 'skills_req': job_skill,
 
     })
 

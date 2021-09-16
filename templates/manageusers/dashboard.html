@@ -1,84 +1,197 @@
-{% extends "base/base.html" %} {%load static%} {% block css%}
+{% extends "base/base.html" %} 
+
+{% load static %} 
+
+
+{% block css %}
 
 <link rel="stylesheet" href="{% static 'manageusers/dashboard.css' %}" />
-{%endblock%} 
+{% endblock %} 
 
 
 {% block content %}
 
 {% if user.user_type == 'HR' %}
-
-<div name="recruiter" class="row recruiter container-fluid">
-  <div class="top_bar">
-    <a href="{% url 'company:create-comp' %}"
-      ><button class="btn btn-primary">Add a company</button></a
-    >
-    <a href="{% url 'jobmanage:create-job' %}"
-      ><button class="btn btn-primary">Create a Job Post</button></a
-    >
-
-    <a href="/users/short_listed"
-      ><button class="btn btn-primary">
-        Shortlisted<span class="badge badge-light">4</span>
-      </button></a
-    >
-
-    <a href=""
-      ><button class="btn btn-primary">
-        Manage Companies<span class="badge badge-light"
-          >{{request.session.no_of_company}}</span
+<div class="row justify-content-center">
+  <div class="col-md-12">
+    <div name="recruiter" class="row recruiter my-3 justify-content-center">
+      <div class="col-md-12 top_bar">
+    
+        <a href="{% url 'jobmanage:create-job' %}" class="btn btn-secondary mx-2 my-2"
+          >Create a Job Post</a
         >
-      </button></a
-    >
-    <a href="{% url 'jobmanage:manage-jobs' %}"
-      ><button class="btn btn-primary">
-        Total Jobs Posted<span class="badge badge-light"
-          >{{created_posts.count}}</span
-        >
-      </button></a
-    >
-    <a href="{% url 'jobmanage:manage-applic' %}"
-      ><button class="btn btn-primary">
-        Manage Applicants<span class="badge badge-light"
-          >{{applicants.count}}</span
-        >
-      </button></a
-    >
-  </div>
-
-  <div class="row">
-    <div class="col-md-8">
-
-      Hampden-Sydney College in Virginia, looked up one of the more obscure
-      Latin words, consectetur, from a Lorem Ipsum passage, and going through
-      the cites of the word in classical literature, discovered the undoubtable
-      source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus
-      Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in
-      45 BC. This book is a treatise on the theory of ethics, very popular
-      during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor
-      sit amet..", comes from a line in section 1.10.32. The standard chunk ofable. The generated
-      Lorem Ipsum is therefore always free from repetition, injected humour, or
-      non-characteristic words etc.
-    </div>
-    <div class="col-md-4">
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Recent Applicants</h5>
-          <ul style="list-style: decimal">
-            {% for val in recent_app %}
-
-            <li class="card-title">{{val.user.first_name}}</li>
-            <span class="card-subtitle mb-2 text-muted"
-              >{{val.job_post.job_type}}</span
-            >
-
-            {% endfor %}
-          </ul>
+    
+        <a href="/users/short_listed" class="btn btn-secondary mx-2 my-2">
+            Shortlisted<span class="badge badge-light mx-2">4</span>
+          </a>
+    
+        <a href="" class="btn btn-secondary mx-2 my-2"> Manage Companies
+           <span class="badge badge-light mx-2">{{request.session.no_of_company}}</span>
+          </a>
+        <a href="{% url 'jobmanage:manage-jobs' %}" class="btn btn-secondary mx-2 my-2">Total Jobs Posted<span class="badge badge-light mx-2">{{created_posts.count}}</span></a>
+        
+        <a href="{% url 'jobmanage:manage-applic' %}" class="btn btn-secondary mx-2 my-2">
+            Manage Applicants<span class="badge badge-light mx-2"
+              >{{applicants.count}}</span></a>
+      </div>
+    
+      <div class="row">
+        <div class="row">
+          <div class="col-md-12">
+            <h3>performance dashboard</h3>
+          </div>
         </div>
+        <div class="row my-3">
+          <div class="col-md-8 p-1">
+            <div class="row">
+              <div class="col-3 my-3">
+                <div class="card card_tiles">
+                  <h5 class="card-title">Title</h5>
+                  <p class="card-text">Content</p>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="card card_tiles">
+                  <h5 class="card-title">Title</h5>
+                  <p class="card-text">Content</p>
+                </div>
+
+              </div>
+              <div class="col-3">
+                <div class="card card_tiles">
+                  <h5 class="card-title">Title</h5>
+                  <p class="card-text">Content</p>
+                </div>
+
+              </div>
+              <div class="col-3">
+                <div class="card">
+                  <h5 class="card-title">Title</h5>
+                  <p class="card-text">Content</p>
+                </div>
+
+              </div>
+              <div class="col-3">
+                <div class="card">
+                  <h5 class="card-title">Title</h5>
+                  <p class="card-text">Content</p>
+                </div>
+
+              </div>
+              <div class="col-3">
+                <div class="card">
+                  <h5 class="card-title">Title</h5>
+                  <p class="card-text">Content</p>
+                </div>
+
+              </div>
+              <div class="col-3">
+                <div class="card">
+                  <h5 class="card-title">Title</h5>
+                  <p class="card-text">Content</p>
+                </div>
+
+              </div>
+            </div>
+          </div> 
+          
+          
+          <div class="col-md-4">
+            <div class="card recent_applies">
+              <div class="card-body">
+                <h5 class="card-title">Recent Applicants</h5>
+                <ul style="list-style: decimal">
+                  {% for val in recent_app %}
+      
+                  <li class="card-title">{{val.user.first_name}}</li>
+                  <span class="card-subtitle mb-2 text-muted"
+                    >{{val.job_post.job_type}}</span
+                  >
+      
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+          <!-- row for charts and graphs  -->
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row justify-content-center">
+            <div class="col-md-10" style="position: relative;">
+            <canvas id="myChart"></canvas>
+            </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row justify-content-center">
+              <div class="col-md-10" style="position: relative;">
+                <canvas id="pieChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+
+    </div>
+
+
+     <!-- row for tables and stuff -->
+     <div class="row">
+      <div class="col-md-8">
+
+
+        <table class="table table-light">
+          <thead class="thead-light">
+            <tr>
+              <th>#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>#</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="col-md-4">
+       <div class="row">
+        <div class="col-md-12" style="position: relative;">
+          <canvas id="line_chart" >
+                
+
+          </canvas>
+          </div>
+       </div>
       </div>
     </div>
+        
+          
+
+        </div>
+        
+      </div>
+
+
+      
+   
+    
+
+
+     
+
+
+
+    </div>
   </div>
-</div>
+
+
 {% else %}
 
 {% if messages %}
@@ -178,7 +291,7 @@
   </div>
   <div class="col-md-6">
     <div class="jobs_applied">
-      <div class="row">
+      <div class="row justify-content-center">
         <div class="col-md-8">
           <div class="card recent_applies">
             <div class="card-body">
@@ -202,5 +315,11 @@
 
   {% endif %} 
 </div>
+  {% endblock %}
+
+  {% block scripts %}
+    <script src="{% static 'manageusers/js/dashboard_charts.js'%}">
+
+    </script>
   {% endblock %}
 

@@ -24,7 +24,7 @@ class JobPost(models.Model):
 
     @property
     def get_jobposters(self):
-        return self.job_posters.all()
+        return f'{self.job_posters.all()}'
 
 
 
@@ -34,7 +34,7 @@ class JobLocation(models.Model):
     city = models.CharField(max_length=25)
     state = models.CharField(max_length=25)
     country = models.CharField(max_length=25)
-    zip = models.CharField(max_length=25)
+    zip_code = models.CharField(max_length=25)
     job = models.ForeignKey(JobPost, on_delete=models.CASCADE,null=True)
     def __str__(self):
         return self.city

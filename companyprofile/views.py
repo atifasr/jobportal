@@ -37,7 +37,7 @@ def create_comp(request):
         cmpy_img = CompanyImage(company=cmpy, image=c_image)
         cmpy_img.save()
 
-        return redirect('./')
+        return redirect('/')
 
     return render(request, 'company/company_entry.html', context={
         'b_stream': bus_obj,

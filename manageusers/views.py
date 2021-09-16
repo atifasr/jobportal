@@ -1,6 +1,8 @@
 from copy import error
 from typing import ContextManager
 
+from pytz import timezone
+
 from seekerbuilder.models import SeekerProfile, ExperienceDetail, Seekerskillset
 from job_management.models import JobPostActivity
 from django.http.response import Http404, HttpResponse, JsonResponse
@@ -24,7 +26,6 @@ from django.contrib import messages
 
 # ---------------------------------imports
 
-
 def number_cmpy():
     try:
         no_of_compy = Company.objects.all()
@@ -45,6 +46,7 @@ def get_jobs_ajax(request):
 
 
 def home(request):
+    
     if request.method == 'GET':
         jobs = JobPost.objects.all()       
 
@@ -73,12 +75,10 @@ def user_reg(request):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         date_of_birth = request.POST.get('date_of_birth')
-        print(date_of_birth)
         contact_no = request.POST['contact_no']
         password = request.POST.get('password')
         user_type = request.POST.get('user_type')
         
-        print(user_type)
         user = User(gender=gender, email=email, first_name=first_name,
                     last_name=last_name, date_of_birth=date_of_birth, contact_no=contact_no,user_type=user_type)
         user.set_password(password)
@@ -145,11 +145,14 @@ def dashboard(request):
     if request.method == "GET":
         no_of_comp = number_cmpy()
         if request.user.user_type == 'HR':
-            created_posts = JobPost.objects.filter(creater=request.user)
-            companies = Company.objects.all()
-
+            try:
+                created_posts = JobPost.objects.filter(job_posters=request.user)
+                companies = Company.objects.all()
+            except ObjectDoesNotExist:
+                print(' no data ')
+                        
             applicants = JobPostActivity.objects.filter(
-                job_post__creater=request.user)
+                job_post__job_posters=request.user)
             recent_ones = applicants.order_by('-apply_date')[:3]
             context = {
                 'created_posts': created_posts,

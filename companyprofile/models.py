@@ -14,6 +14,7 @@ class Company(models.Model):
     prof_description = models.TextField()
     estab_date = models.DateTimeField()
     company_website = models.URLField(max_length=255)
+    contact_email = models.EmailField(blank=False)
 
     class Meta:
         verbose_name = 'Company'
@@ -26,7 +27,7 @@ class Company(models.Model):
 
 class BuisnessStream(models.Model):
     buisness_stream_name = models.CharField(max_length=255)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE,null=True)
+    company = models.ManyToManyField(Company)
 
     class Meta:
         verbose_name = 'BuisnessStream'
@@ -38,7 +39,7 @@ class BuisnessStream(models.Model):
 class CompanyImage(models.Model):
     cover_image = models.ImageField(upload_to='images/company_cover')
     images = models.ImageField(upload_to='images')
-    company = models.ForeignKey(Company, on_delete=CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'CompanyImage'

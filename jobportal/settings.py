@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
     'manageusers',
     # django rest framework
     'rest_framework',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'seekerbuilder',
     # 'api',
     'job_management',
+    "django_apscheduler",
     'django_memcached',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -169,3 +171,6 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+SCHEDULER_AUTOSTART = True

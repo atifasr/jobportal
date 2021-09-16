@@ -31,7 +31,8 @@ def update_details(request):
         curr_user.last_name = request.POST['last_name']
         curr_user.contact_no = request.POST.get('contact_no')
         curr_user.date_of_birth = request.POST.get('date_of_birth')
-
+        curr_user.gender = request.POST.get('gender')
+        print(request.POST.get('gender'))
         curr_user.save()
 
         # updating Seekers profile
@@ -40,6 +41,7 @@ def update_details(request):
         user.last_name = curr_user.last_name
         user.resume = request.FILES.get('resume')
         user.photo = request.FILES.get('photo')
+        
         city = request.POST.get('city')
         state = request.POST.get('state')
         zip_code = request.POST.get('zip_code')
@@ -69,30 +71,6 @@ def update_details(request):
         
         user.save()
 
-        # skill_name = request.POST.getlist('skill_name')
-        # skill_level = request.POST.getlist('skill_level')
-
-
-        # seeker_skll = []
-
-
-    # #    update details if skill details already exist
-    #     try:
-    #         seeker_skills = Seekerskillset.objects.filter(seeker=user)
-    #         # print(seeker_skills)
-    #         for skill in seeker_skills:
-    #             print(skill)
-    #         # for skill_nme, skill_lvl in zip(skill_name, skill_level):
-    #         #     seeker_skills.skill_set
-    #         #     seeker_skills.skill_set
-    #     except Seekerskillset.DoesNotExist:
-    #         for skill_nme, skill_lvl in zip(skill_name, skill_level):
-    #             skill_set = Skillset.objects.get(skill_name=skill_nme)
-    #             seeker_skll.append(Seekerskillset(
-    #                 skill_set=skill_set, skill_level=skill_lvl, seeker=user))
-
-    #         seeker_bulk = Seekerskillset.objects.bulk_create(seeker_skll)
-    #         print('after insertion',seeker_bulk)
         messages.add_message(request,messages.INFO,'Details updated'.capitalize())
         return redirect('/dashboard/')
 
@@ -113,7 +91,7 @@ def update_edu(request):
         })
     except ObjectDoesNotExist:
         user = None
-
+        seeker = None
     if request.method == 'POST':
         # try:
         #     user = EducationDetail.objects.get(profile=seeker)

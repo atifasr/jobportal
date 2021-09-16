@@ -1,15 +1,8 @@
-{% extends "base/base.html" %} {% block content %}
+{% extends "base/base.html" %} 
 
-<style>
-  .contain {
-    display: flex;
-    justify-content: center;
-  }
-</style>
+{% load static %}
 
-<script>
-  $("#c_website").hide();
-</script>
+{% block content %}
 
 {% if contxt == 'company_contxt' %}
 <div class="contain">
@@ -97,7 +90,14 @@
 </div>
 
 {% else %}
-<div class="contain">
+<div class="row mx-4">
+  <div class="col-8">
+
+
+
+
+
+
   <form class="form-horizontal" action="" method="POST">
     {% csrf_token %}
     <fieldset>
@@ -110,126 +110,142 @@
         <legend class="display-2">Create a Job Post</legend>
       </div>
       {% endif %}
-      <div class="stream_choices">
-        <label class="control-label" for="Job company">Job Company</label>
-        <select name="company_name" id="">
-          {% for val in company %}
-          <option value="{{val}}">{{val}}</option>
-          {% endfor %}
-        </select>
-      </div>
+
+      
 
       <!-- Username -->
 
-      <div class="control-group">
-        <fieldset
-          style="
-            display: flex;
-            flex-direction: column;
-            border: 0.8px solid black;
-            border-radius: 3.3px;
-            padding: 3px;
-          "
-        >
-          <legend>Job Location</legend>
-          <label for="address">Street address</label>
-          <textarea name="address">{{val.job_loc.address}}</textarea>
-          <label for="city">City</label>
-          <input type="text" name="city" value="{{val.job_loc.city}}" />
-          <label for="state">State</label>
-          <input type="text" name="state" value="{{val.job_loc.state}}" />
-          <label for="country">Country</label>
-          <input type="text" name="country" value="{{val.job_loc.country}}" />
-          <label for="zip">Zip</label>
-          <input type="text" name="zip" value="{{val.job_loc.zip}}" />
-        </fieldset>
-      </div>
-      <div class="control-group">
-        <!-- Username -->
-        <label class="control-label" for="job_title">job_title</label>
-        <div class="controls">
-          <input type="text"
-          id=""
-          name="job_title"
-          placeholder="Job Type"
-          class="input-xlarge">
-        </div>
-      </div>
-      <div class="control-group">
-        <!-- Username -->
-        <label class="control-label" for="job_skill_name">Job skill and level</label>
-        <div class="controls" style="display: flex; flex-direction: column;">
+      <div class="row ml-2">
+        <div class="col-md-12">
+          <div class="form row">
+            <div class="col-2 mr-3">
+              <label for="company_name"> Company </label>
+              <select class="form-select" aria-label="Default select example" name="company_name">Company name
+                
+                {% for val in company %}
+                <option value="{{val}}">{{val}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-2"><button class="btn btn-secondary" type="button"><i class="fas fa-plus-square"></i></button></div>
+          </div>
           
-            {% for val in skills_req %}
-            
-            <input type="checkbox" name="job_skill_name[]" value="{{val.skill_name}}">{{val.skill_name}}</input type="checkbox">
-            <select name="job_skill_level[]">
+            <fieldset>
+              <legend>Job Location</legend>
+              <div class="form-row ,y-2">
+                <div class="col-md-10">
+                  <label for="address">Street address</label>
+                <textarea name="street_addr" class="form-control" >{{val.job_loc.address}}</textarea>
+                </div>
+              </div>
+
+              <div class="form-row my-2">
+                <div class="col-md-4">
+                  <label for="city">City</label>
+                  <input class="form-control" type="text" name="city" value="{{val.job_loc.city}}" />
+                </div>
+
+                <div class="col-md-4">
+                  <label for="state">State</label>
+                  <input class="form-control" type="text" name="state" value="{{val.job_loc.state}}" />
+                </div>
+              </div>
+              
+              <div class="form-row my-2">
+                <div class="col-md-4">
+                  <label for="country">Country</label>
+                  <input class="form-control" type="text" name="country" value="{{val.job_loc.country}}" />
+                </div>
+
+                <div class="col-md-4">
+                  <label for="zip">Zip</label>
+                  <input class="form-control" type="text" name="zip_code" value="{{val.job_loc.zip}}" />
+
+                </div>
+              </div> 
+            </fieldset>
+          
+        </div>
+
+        <div class="form-row">
+          <div class="col-md-6">
+            <label class="control-label" for="job_title">job_title</label>
+            <input class="form-control" type="text" id="" name="job_title" placeholder="Job Type" class="input-xlarge">
+          </div>
+          <div class="col-md-6">
+
+          </div>
+        </div>
+
+      
+        <div class="form-row mt-3 skillDiv">
+          <div class="col-md-4">
+            <label class="control-label" for="job_type"></label>
+              <label class="control-label" for="job_type">
+                {%if val%}{{val.job_type}} {% else %}Job type {%endif%} </label
+              ><input
+              class="form-control"
+                type="text"
+                name="job_type"
+                placeholder="Job Type"
+              />
+          </div>
+          <div class="col-md-4">
+            <label class="control-label" for="job_skill_name">Skill required</label>
+              <select class="form-control" name="job_skill_level"> 
               <option value="beginner">beginner</option>
               <option value="intermediate">intermediate</option>
               <option value="expert">expert</option>
-            </select>
-            {% endfor %}
+              </select>
+         
           </select>
+          </div>
+          <div class="col-2">
+            <button type="button" class="btn btn-secondary create_job"><i class="fa fa-plus"></i></button>
+          </div>
         </div>
-      </div>
-        
 
-      <div class="control-group">
-        <!-- Username -->
-        <label class="control-label" for="job_type"></label>
-        <div class="controls">
-          <label class="control-label" for="job_type">
-            {%if val%}{{val.job_type}} {% else %}Job type {%endif%} </label
-          ><input
-            type="text"
-            id="c_name"
-            name="job_type"
-            placeholder="Job Type"
-            class="input-xlarge"
-          />
-        </div>
-      </div>
-      <div class="control-group">
-        <!-- Username -->
-        <label class="control-label" for="job_tag">Job Tag</label>
-        <div class="controls">
-          <input
-            type="text"
-            id=""
-            name="job_tag"
-            placeholder="job_tag"
-            class="input-xlarge"
-          />
-        </div>
-      </div>
-      
-      
-
-      <div class="control-group">
-        <!-- Username -->
-        <label class="control-label" for="job_descrip">Job Description</label>
-        <div class="controls">
-          <textarea name="job_descrip" id="" cols="30" rows="10">
-{{val.job_description}}</textarea
+        <div class="form-row">
+          <div class="col-md-8">
+            <label class="control-label" for="job_descrip">Job Description</label>
+            <div class="controls">
+            <textarea class="form-control" name="job_descrip" id="" cols="30" rows="10">
+              {{val.job_description}}</textarea
           >
         </div>
+          </div>
+        </div>
+
+
+        <div class="form-row mt-3">
+          <div class="col-md-3">
+            <label class="control-label" for="job_descrip">Salary from </label>
+              <input class="form-control" type="number" name="salary" value="{{val.salary}}" />
+          </div>
+          <div class="col-md-3">
+            <label for="to_salary"> to</label>
+            <input class="form-control" type="number" name="salary" value="">
+          </div>
+        </div>
+        
       </div>
-      <div class="control-group">
-        <!-- Username -->
-        <label class="control-label" for="job_descrip">Salary</label>
-        <div class="controls">
-          <input type="number" name="salary" value="{{val.salary}}" />
+      <div class="form-row justify-content-center my-3">
+        <div class="col-4">
+          <button class="btn btn-success btn-lg">Register</button>
         </div>
       </div>
 
-      <div class="control-group">
-        <!-- Button -->
-        <div class="controls">
-          <button class="btn btn-success">Register</button>
-        </div>
-      </div>
-    </fieldset>
   </form>
 </div>
+</div>
+  
 
-{% endif %} {% endblock %}
+{% endif %} 
+
+
+{% endblock %}
+
+
+{% block scripts %}
+  <script src="{% static 'js/create_job.js' %}"></script>
+{% endblock  %}

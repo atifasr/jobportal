@@ -63,7 +63,13 @@ def modify_salary(salary_str):
     return salary
  
        
-    
+def get_description(job_link):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
+    }
+    url = f"{job_link}"
+
+
 
 
 #getting job data dictionary

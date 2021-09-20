@@ -80,9 +80,9 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '372842592923-acn27ci359t8199nc1jm30526ttiken4.apps.googleusercontent.com',
-            'secret': 'Wf8QQJ8BFRZLgLaZi7EJnM7R',
-            'key': 'AIzaSyApOAdK77XdY2_pErICBpMNbGEdX19CiQA'
+            'client_id': Google_client_id,
+            'secret': Google_secret,
+            'key': Api_Key
         },
         "SCOPE": [
             "profile",

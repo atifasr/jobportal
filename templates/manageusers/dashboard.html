@@ -21,13 +21,10 @@
           >Create a Job Post</a
         >
     
-        <a href="/users/short_listed" class="btn btn-secondary mx-2 my-2">
+        <a href="{% url 'jobmanage:sort-listed' %}" class="btn btn-secondary mx-2 my-2">
             Shortlisted<span class="badge badge-light mx-2">4</span>
           </a>
     
-        <a href="" class="btn btn-secondary mx-2 my-2"> Manage Companies
-           <span class="badge badge-light mx-2">{{request.session.no_of_company}}</span>
-          </a>
         <a href="{% url 'jobmanage:manage-jobs' %}" class="btn btn-secondary mx-2 my-2">Total Jobs Posted<span class="badge badge-light mx-2">{{created_posts.count}}</span></a>
         
         <a href="{% url 'jobmanage:manage-applic' %}" class="btn btn-secondary mx-2 my-2">
@@ -44,54 +41,49 @@
         <div class="row my-3">
           <div class="col-md-8 p-1">
             <div class="row">
-              <div class="col-3 my-3">
+              <div class="col-md-3 mb-3">
                 <div class="card card_tiles">
                   <h5 class="card-title">Title</h5>
                   <p class="card-text">Content</p>
                 </div>
               </div>
-              <div class="col-3">
-                <div class="card card_tiles">
-                  <h5 class="card-title">Title</h5>
-                  <p class="card-text">Content</p>
-                </div>
-
-              </div>
-              <div class="col-3">
+              <div class="col-md-3 mb-3">
                 <div class="card card_tiles">
                   <h5 class="card-title">Title</h5>
                   <p class="card-text">Content</p>
                 </div>
 
               </div>
-              <div class="col-3">
-                <div class="card">
+              <div class="col-md-3 mb-2">
+                <div class="card card_tiles">
                   <h5 class="card-title">Title</h5>
                   <p class="card-text">Content</p>
                 </div>
 
               </div>
-              <div class="col-3">
-                <div class="card">
+              <div class="col-md-3 mb-2">
+                <div class="card card_tiles">
                   <h5 class="card-title">Title</h5>
                   <p class="card-text">Content</p>
                 </div>
 
               </div>
-              <div class="col-3">
-                <div class="card">
+              <div class="col-md-3 mb-2">
+                <div class="card card_tiles">
                   <h5 class="card-title">Title</h5>
                   <p class="card-text">Content</p>
                 </div>
 
               </div>
-              <div class="col-3">
-                <div class="card">
+              <div class="col-md-3 mb-2">
+                <div class="card card_tiles">
                   <h5 class="card-title">Title</h5>
                   <p class="card-text">Content</p>
                 </div>
 
               </div>
+             
+             
             </div>
           </div> 
           
@@ -100,7 +92,7 @@
             <div class="card recent_applies">
               <div class="card-body">
                 <h5 class="card-title">Recent Applicants</h5>
-                <ul style="list-style: decimal">
+                <ul>
                   {% for val in recent_app %}
       
                   <li class="card-title">{{val.user.first_name}}</li>
@@ -229,7 +221,7 @@
     
   </div>
   <div class="row">
-  <div class="col-6">
+  <div class="col-md-7">
     
     <div class="card my-3">
       <div class="card-body">
@@ -240,7 +232,13 @@
         <div class="row">
           <div class="col-12">
             <h4">{{request.user.first_name}}</h4>
-            <img src="" alt="">
+           
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            
+            <img class="img-fluid rounded" src="{{ request.user.seekerprofile.photo.url }}" alt="">
           </div>
         </div>
         <table class="table">
@@ -259,9 +257,7 @@
           
             </tr>
             <tr>
-              
-              <td>Resume : {{seeker_profile.resume}}</td>
-             
+              <a href="{{seeker_profile.get_resume_url}}" class="btn btn-secondary">Resume</a>             
             </tr>
             <tr>
               <thead>
@@ -277,19 +273,28 @@
             {% for skills in seeker_profile.seekerskillset_set.all %}
             <tr>
              
-              <td>{{skills.skill_set.skill_name}}</td> <td>{{skills.skill_level}}</td>
+              <td>{{skills.skill_name}}</td> <td>{{skills.skill_level}}</td>
            
             </tr>
             {% endfor %}
           </tbody>
         </table>
+        <div class="row">
+          <div class="col-md-6">
+            <p>Saved jobs <span class="badge badge-pill badge-primary">7</span></p>
+          </div>
+
+          <div class="col-md-6">
+            <p><a href="#">Shortlisted </a><span class="badge badge-pill badge-success">7</span></p>
+          </div>
+        </div>
        
       </div>
     </div>
     
     
   </div>
-  <div class="col-md-6">
+  <div class="col-md-5">
     <div class="jobs_applied">
       <div class="row justify-content-center">
         <div class="col-md-8">
@@ -297,12 +302,15 @@
             <div class="card-body">
               <h3>Recently applied for</h3>
               <ul style="list-style: decimal">
-                {% for val in recently_applied %}
-                <h5 class="card-title">{{val.job_post.title}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                  {{val.apply_date}}
-                </h6>
-                {% endfor %}
+                <ul class="list-group list-group-flush">
+                  {% for val in recently_applied %}
+                  <a href="#"> <li class="list-group-item">{{val.job_post.title}}</li></a>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                    {{val.apply_date}}
+                  </h6>
+                  
+                  {% endfor %}
+                </ul>
               </ul>
             </div>
           </div>

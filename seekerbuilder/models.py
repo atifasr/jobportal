@@ -16,12 +16,32 @@ class SeekerProfile(models.Model):
     currency = models.CharField(max_length=25,blank=True,null=True)
     photo = models.ImageField(upload_to='applicants/profile_pictures',blank=True, null=True)
     resume = models.FileField(upload_to='applicants/documents',blank=True)
+    contact_no = models.IntegerField(null=True)
 
     class Meta:
         verbose_name_plural  = "Seekers' profile"
 
     def __str__(self):
         return self.user.first_name
+
+    def save(self, *args, **kwargs):
+        if not self.contact_no:
+            self.contact_no = self.user.contact_no
+        super().save(*args, **kwargs)
+
+    @property
+    def get_photo_url(self):
+        if self.photo is not None:
+            return f"{self.photo.url}"
+        else:
+            return " "
+
+    @property
+    def get_resume_url(self):
+        if self.resume is not None:
+            return f"{self.resume.url}"
+        else:
+            return " "
 
 
 class ExperienceDetail(models.Model):
@@ -34,7 +54,7 @@ class ExperienceDetail(models.Model):
     job_location_city = models.CharField(max_length=50)
     job_location_country = models.CharField(max_length=60)
     description = models.TextField()
-    
+
     class Meta:
         verbose_name_plural  = "Seekers' experience details"
 
@@ -52,7 +72,7 @@ class EducationDetail(models.Model):
 
 
 class Seekerskillset(models.Model):
-    skill_set = models.ManyToManyField(Skillset)
+    skill_name = models.CharField(max_length=24,null=True)
     seeker = models.ForeignKey(SeekerProfile, on_delete=models.CASCADE)
     skill_level = models.CharField(max_length=25)
 
@@ -62,7 +82,7 @@ class Seekerskillset(models.Model):
 
 
     def __str__(self):
-        return f"{self.skill_set.skill_name} {self.skill_level}"
+        return f"{self.skill_name}"
 
     # @property
     # def get_seekers_skills(self):

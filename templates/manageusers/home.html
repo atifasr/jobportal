@@ -12,67 +12,123 @@
 
 {% block content %} 
 
-{% if messages %}
-<ul class="messages">
-  {% for message in messages %}
-  <li class="{{ message.tags }}">{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %} 
 
 
+<div class="row">
+  <div class="col-md-6 message_div">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %} 
+  </div>
+</div>
 
-<div class="row jobs justify-content-center">
-  <div class="col-md-9">
+<div class="row jobs my-3">
+  <div class="col-md-9 ">
     {% for val in jobs %}
-    <a href="{% url 'jobmanage:job-det' val.id %}" class="card-link">
-    <div class="card">
+   
+    <div class="card jobs_cards my-3" >
       <div class="card-body">
-        <h5 class="card-title">
+        <div class="dropdown card-dropdown">
+          <a href="" class="btn btn-scondary" dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-bars"></i></a>
+           
+         
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item save_job" href="#" data-job="{{val.id}}" data-user="{{request.user}}">Save </a>
+          </div>
+        </div>
+        <a href="{% url 'jobmanage:job-det' val.id %}" <h5 class="card-title card-link">
           {{val.title}}
-        </h5>
+        </h5></a>
+        <div class="row">
+          <div class="col-12">
+            <h6 class="card-subtitle mb-2 text-muted">{{val.cmpny_name.name}}</h6>
+          </div>
+        </div>
+        <div class="row">
+          {% for address in val.joblocation_set.all%}
+          <div class="col-md-6">
+            <h6 class="card-subtitle mb-2 text-muted">{{address.state}}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{address.city}}</h6>
+          </div>
+          {% endfor %}
+        </div>
+        
 
-        <h6 class="card-subtitle mb-2 text-muted">{{val.cmpny_name}}</h6>
-        <h5 class="card-title">{{val.salary}}</h5>
+        <h5 class="card-subtitle mb-2 text-muted">{{val.salary_start}} - {{val.salary_end}}</h5>
         <p class="card-text">{{val.job_description}}</p>
       </div>
     </div>
-    </a>
+    
     {% endfor %}
   </div>
   <div class="col-md-3">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div class="card recent_applicants">
+          <div class="card-body">
+            <h5 class="card-title">Drop your email for more job like this!</h5>
 
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Drop your email for more job like this!</h5>
-          <form>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <button class="btn btn-primary activate-btn" data-toggle="modal" data-target="#exampleModalCenter"> Activate </button>
+                </div>
+                
               </div>
-              
-            </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
+          </div>
         </div>
       </div>
+    </div>
+     
+  </div>
+
+
+
+
+
+
+  <!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Your Email address</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="email" class="form-control mb-3">
+        <a href="#" class="btn btn-secondary">Save changes</a>
+      </div>  
+    </div>
   </div>
 </div>
-
-
-
-<div class="pagination">
-  <button>page current</button>
-  <a href="/users/get_page/?page_num={{page.next_page_number}}"
-    ><button>next page</button></a
-  >
-  <button value="{{page_num.num_pages}}">{{page_num.num_pages}}</button>
 </div>
+
+
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
 
 <script>
   $(document).ready(function () {
     $.ajax({
-      url: "/users/get_jobs_ajax",
+      url: "/get_jobs_ajax/",
       type: "GET",
       contentType: "application/json",
       dataType: "json",
@@ -87,3 +143,8 @@
 </script>
 
 {% endblock %}
+
+
+{% block scripts %}
+<script src="{% static 'js/save_job.js' %}"></script>
+{% endblock  %}

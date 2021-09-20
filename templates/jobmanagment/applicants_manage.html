@@ -5,15 +5,20 @@
 <h1>Applied applicants</h1>
 
 <table class="contain">
-  <tr>
-    <th>username</th>
-    <th>applied date</th>
-    <th>status</th>
-    <th>job_type</th>
-    <th>job title</th>
-    <th>skills</th>
-    <th>skills req</th>
-  </tr>
+  {% if applicants %}
+  <thead>
+    <tr class="header_row">
+      <th scope="col">#</th>
+      <th scope="col">username</th>
+      <th scope="col">applied date</th>
+      <th scope="col">status</th>
+      <th scope="col">job title</th>
+    </tr>
+    </thead>
+ 
+  {% endif %}
+  
+
   {% for val in applicants %}
 
   <tr>
@@ -24,15 +29,16 @@
     </td>
     <td>{{val.apply_date}}</td>
     <td>
+      
       <select
-        class="status_select"
+        class="custom-select status_select"
         name="{{val.job_post.title}}"
         id="{{val.user.id}}"
       >
-        <option selected="{{val.status}}" style="font-weight: bolder">
+        <option selected="{{val.status}}" >
           {{val.status}}
         </option>
-        <option value="onhold">Onhold</option>
+        <option selected value="onhold">Onhold</option>
         <option value="selected">Selected</option>
         <option value="rejected">Rejected</option>
       </select>
@@ -42,21 +48,9 @@
     </td>
     <td>{{val.job_post.title}}</td>
     <td>
-      <ul>
-        {% for cand_skills in val.user.seekerprofile.seekerskillset_set.all %}
-        <li>{{cand_skills.skill_set.skill_name}}</li>
-        <li>{{cand_skills.skill_level}}</li>
-        {%endfor%}
-      </ul>
+      <button class="btn btn-secondary">view details</button>
     </td>
-    <td>
-      <ul>
-        {%for job_skills in val.job_post.job_skillset_set.all%}
-        <li>{{job_skills.skill.skill_name}}</li>
-        <li>{{job_skills.skill_level}}</li>
-        {%endfor%}
-      </ul>
-    </td>
+  
   </tr>
   {% endfor %}
 </table>

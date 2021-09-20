@@ -8,15 +8,20 @@ from django.core.exceptions import *
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.core.cache import cache
-from job_management.models import Skillset
+from job_management.models import Skillset,JobPost,SavedJobs
 # Create your views here.
 from seekerbuilder.models import *
+from django.http.response import JsonResponse
 
 # for application form
 
 # creating or updating user details
 @csrf_exempt
 def update_details(request):
+    try:
+        prof = SeekerProfile.objects.get(user= request.user)
+    except SeekerProfile.DoesNotExist:
+        prof = None
     if request.method == "POST":
         curr_user = User.objects.get(id= request.user.id)
         # seeker profile insertion if there is no data present else update
@@ -25,28 +30,29 @@ def update_details(request):
         except (ObjectDoesNotExist):
             print('from exception')
             user = SeekerProfile()
-        
+
         # updating users profile
         curr_user.first_name = request.POST['first_name']
         curr_user.last_name = request.POST['last_name']
         curr_user.contact_no = request.POST.get('contact_no')
         curr_user.date_of_birth = request.POST.get('date_of_birth')
         curr_user.gender = request.POST.get('gender')
-        print(request.POST.get('gender'))
         curr_user.save()
+
 
         # updating Seekers profile
         user.user = curr_user
         user.first_name = curr_user.first_name
         user.last_name = curr_user.last_name
         user.resume = request.FILES.get('resume')
+        print(request.FILES.get('photo'))
         user.photo = request.FILES.get('photo')
-        
+
         city = request.POST.get('city')
         state = request.POST.get('state')
         zip_code = request.POST.get('zip_code')
         address_street = request.POST.getlist('address_street')
-        
+
 
         try:
             user_address = Address.objects.filter(user = curr_user)
@@ -68,7 +74,7 @@ def update_details(request):
                 )
                 )
             Address.objects.bulk_create(address_obj_list)
-        
+
         user.save()
 
         messages.add_message(request,messages.INFO,'Details updated'.capitalize())
@@ -77,7 +83,8 @@ def update_details(request):
     skill_names = Skillset.objects.all()
     return render(request, 'manageusers/application_form.html', context={
         'type': 'updatedetail',
-        'skill_names': skill_names
+        'skill_names': skill_names,
+        'prof':prof    
     })
 
 
@@ -89,14 +96,10 @@ def update_edu(request):
             'starting_date': datetime.datetime.now(),
             'completion_date': datetime.datetime.now(),
         })
-    except ObjectDoesNotExist:
-        user = None
+    except SeekerProfile.DoesNotExist:
         seeker = None
+
     if request.method == 'POST':
-        # try:
-        #     user = EducationDetail.objects.get(profile=seeker)
-        # except(ObjectDoesNotExist):
-        #     user = EducationDetail()
         user.profile = seeker
         user.certificate_degree_name = request.POST['degree_name']
         user.major = request.POST['major']
@@ -105,7 +108,23 @@ def update_edu(request):
         user.completion_date = request.POST['completion_date']
         user.save()
 
-        return redirect('/users/dashboard/')
+        skill_names = request.POST.getlist('skill_name')
+        skill_levels = request.POST.getlist('skill_level')
+        print(skill_levels)
+        Seeker_Skill_list = []
+        for skill_name, skill_level in zip(skill_names,skill_levels):
+            print(skill_name,skill_level)
+            Seeker_Skill_list.append(
+                Seekerskillset(
+                    seeker = seeker,
+                    skill_name = skill_name,
+                    skill_level = skill_level                
+                )
+            )
+        Seekerskillset.objects.bulk_create(Seeker_Skill_list)
+        
+
+        return redirect('/dashboard/')
 
     return render(request, 'manageusers/application_form.html', context={
         'type': 'updateeducation',
@@ -138,7 +157,7 @@ def update_exper(request):
         user.job_location_country = request.POST.get('job_location_country')
         user.description = request.POST.get('description')
         user.save()
-        return redirect('/users//dashboard/')
+        return redirect('/dashboard/')
 
     return render(request, 'manageusers/application_form.html', context={
         'type': 'updateexper',
@@ -146,3 +165,27 @@ def update_exper(request):
     })
 
     # for updating experience
+
+
+
+    #saving Jobs
+
+
+def save_job(request):
+    if request.method == 'GET':
+        job_id = request.GET.get('id')
+        user_job  = request.GET.get('us_job')
+        saved_status ={
+            'saved':False
+        }
+        job_ins = JobPost.objects.get(id = job_id)
+        user_ins = User.objects.get(username = user_job)
+        job_created_ins,created = SavedJobs.objects.get_or_create(user= user_ins,job=job_ins)
+        if not created:
+            saved_status['saved'] = True
+            print('job is already saved')
+        else:
+            saved_status['saved'] = False
+        print(id,user_job)
+        print('working')
+        return JsonResponse(saved_status,safe='False')

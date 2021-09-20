@@ -11,10 +11,10 @@ from django.utils import tree
 class Company(models.Model):
     
     name = models.CharField(max_length=255)
-    prof_description = models.TextField()
-    estab_date = models.DateTimeField()
-    company_website = models.URLField(max_length=255)
-    contact_email = models.EmailField(blank=False)
+    prof_description = models.TextField(null=True,blank=True)
+    estab_date = models.DateTimeField(null=True)
+    company_website = models.URLField(max_length=255,null=True)
+    contact_email = models.EmailField(blank=False,null=True)
 
     class Meta:
         verbose_name = 'Company'

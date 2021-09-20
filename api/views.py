@@ -12,5 +12,4 @@ def get_applic(request):
             job_post__creater=request.user)
         print(request.user.username)
         serializer_data = JobactivitySerializer(applied_candi, many=True)
-        print(serializer_data)
         return JsonResponse(serializer_data.data, safe=False)

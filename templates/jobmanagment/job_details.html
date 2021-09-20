@@ -1,7 +1,7 @@
 {% extends "base/base.html"%} {% block content %}
 
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12>
     {% if user == 'HR'%}
     <h2 class="display-3">Jobs created</h2>
     {% for val in jobs_created %}
@@ -15,22 +15,23 @@
               <a href="{% url 'jobmanage:update-post' val.id %}"
                 ><button class="btn btn-primary">Update</button></a
               >
-              <a href=""><button class="btn btn-primary">Delete</button></a>
+              <a href="{% url 'jobmanage:manage-jobs' %}?job={{val.id}}"><button class="btn btn-primary">Delete</button></a>
             </div>
           </div>
         </div>
       </div>
     </div>
     {% endfor %} {% else %}
+
     <h2 class="display-3">Jobs applied</h2>
     {% for val in jobs_applied %}
     <div class="jobs_applied">
       <div class="row">
         <div class="col-md-8">
-          <div class="card" style="width: 50rem">
+          <div class="card mb-3">
             <div class="card-body">
-              <h5 class="card-title">{{val.job_post.title}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <a href="{% url 'jobmanage:job-det' val.job_post.id %}"><h5 class="card-title">{{val.job_post.title}}</h5></a>
+              <h6 class="card-subtitle mb-2 text-muted">{{val.job_post.cmpny_name}}</h6>
               {% if val.status == 'selected' %}
               <button class="btn btn-success">{{val.status}}</button>
               {% elif val.status == 'onhold' %}
@@ -38,12 +39,19 @@
               {% else %}
               <button class="btn btn-danger">{{val.status}}</button>
               {% endif %}
+              <small>Apply date : {{val.apply_date}}</small>
             </div>
           </div>
         </div>
       </div>
     </div>
-    {% endfor %} {% endif %}
+    {% endfor %} 
+    
+    
+    
+    
+    
+    {% endif %}
   </div>
 </div>
 

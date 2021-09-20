@@ -24,7 +24,7 @@
       <article class="card-body mx-auto">
         <h4 class="card-title mt-3 text-center">Update details</h4>
 
-        <form action="" method="POST">
+        <form enctype="multipart/form-data" action="" method="POST" >
           {% csrf_token %}
 
           <div class="form-row">
@@ -51,12 +51,13 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="resume">Profile picture</label>
               <div class="input-group mb-3">
-                
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupFileAddon01">Profile pic</span>
+                </div>
                 <div class="custom-file">
-                  <input name="photo" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                 
+                  <input  name="photo" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" value="{{prof.get_photo_url}}">
+                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                 </div>
               </div>
 
@@ -65,12 +66,13 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="resume">Upload your resume</label>
               <div class="input-group mb-3">
-                
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupFileAddon01">Resume</span>
+                </div>
                 <div class="custom-file">
-                  <input name="resume" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                 
+                  <input name="resume" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" value="{{prof.get_resume_url}}">
+                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                 </div>
               </div>
 
@@ -216,17 +218,16 @@
            <label for="ins_university_name"> Skill</label>
            <div class="form-group input-group">
  
-             <input type="text" class="form-control" placeholder="skill">
+             <input name="skill_name" type="text" class="form-control" placeholder="skill name">
            </div>
           </div>
 
           <div class="col-md-5">
             <label for="ins_university_name"> Skill level</label>
-            <select class="custom-select" id="inputGroupSelect02">
+            <select name="skill_level" class="custom-select">
               <option selected value="beginner">Beginner</option>
-            
-              <option value="2">intermediate</option>
-              <option value="3">advance</option>
+              <option value="intermediate">intermediate</option>
+              <option value="advance">advance</option>
             </select>
           </div>
           <div class="col-md-2">

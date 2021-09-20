@@ -1,7 +1,23 @@
 {% extends 'base/base.html'%} {% block content %}
 
+
+<div class="row">
+  <div class="col-12">
+    <img src="" class="img-fluid rounded float-left" alt="">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Profile details</h5>
+        <p class="card-text">{{profile.user.first_name}}</p>
+        <p class="card-text">Content</p>
+        <h6 class="card-subtitle mb-2 text-muted">skills</h6>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="prof">
-  <p class="name">{{profile.user.first_name}}</p>
+  <p class="name"></p>
   <img src="" alt="this image" />
 
   <div class="exp">

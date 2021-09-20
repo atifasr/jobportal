@@ -90,13 +90,26 @@
 </div>
 
 {% else %}
+<div class="row">
+  <div class="col-6">
+    {% if messages %}
+    {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>Congo !</strong>  {{ message }}   
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+       
+        {% endif %}
+    {% endfor %}
+{% endif %}
+  </div>
+</div>
+
 <div class="row mx-4">
   <div class="col-8">
-
-
-
-
-
 
   <form class="form-horizontal" action="" method="POST">
     {% csrf_token %}
@@ -135,31 +148,31 @@
               <div class="form-row ,y-2">
                 <div class="col-md-10">
                   <label for="address">Street address</label>
-                <textarea name="street_addr" class="form-control" >{{val.job_loc.address}}</textarea>
+                <textarea name="street_addr" class="form-control">{{address.address}}</textarea>
                 </div>
               </div>
 
               <div class="form-row my-2">
                 <div class="col-md-4">
                   <label for="city">City</label>
-                  <input class="form-control" type="text" name="city" value="{{val.job_loc.city}}" />
+                  <input class="form-control" type="text" name="city" value="{{address.city}}" />
                 </div>
 
                 <div class="col-md-4">
                   <label for="state">State</label>
-                  <input class="form-control" type="text" name="state" value="{{val.job_loc.state}}" />
+                  <input class="form-control" type="text" name="state" value="{{address.state}}" />
                 </div>
               </div>
               
               <div class="form-row my-2">
                 <div class="col-md-4">
                   <label for="country">Country</label>
-                  <input class="form-control" type="text" name="country" value="{{val.job_loc.country}}" />
+                  <input class="form-control" type="text" name="country" value="{{address.country}}" />
                 </div>
 
                 <div class="col-md-4">
                   <label for="zip">Zip</label>
-                  <input class="form-control" type="text" name="zip_code" value="{{val.job_loc.zip}}" />
+                  <input class="form-control" type="text" name="zip_code" value="{{address.zip_code}}" />
 
                 </div>
               </div> 
@@ -176,18 +189,18 @@
 
           </div>
         </div>
-
+        
       
         <div class="form-row mt-3 skillDiv">
           <div class="col-md-4">
             <label class="control-label" for="job_type"></label>
               <label class="control-label" for="job_type">
-                {%if val%}{{val.job_type}} {% else %}Job type {%endif%} </label
+                Skill name </label
               ><input
               class="form-control"
                 type="text"
-                name="job_type"
-                placeholder="Job Type"
+                name="skill_name"
+                placeholder="Skill name"
               />
           </div>
           <div class="col-md-4">
@@ -220,11 +233,11 @@
         <div class="form-row mt-3">
           <div class="col-md-3">
             <label class="control-label" for="job_descrip">Salary from </label>
-              <input class="form-control" type="number" name="salary" value="{{val.salary}}" />
+              <input class="form-control" type="number" name="salary_start" value="{{val.salary_start}}" />
           </div>
           <div class="col-md-3">
             <label for="to_salary"> to</label>
-            <input class="form-control" type="number" name="salary" value="">
+            <input class="form-control" type="number" name="salary_end" value="{{val.salary_end}}">
           </div>
         </div>
         

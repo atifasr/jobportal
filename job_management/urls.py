@@ -14,5 +14,5 @@ urlpatterns = [
     path('manage_applic/', manage_applic, name='manage-applic'),
     path('status_change/', status_change, name='status-change'),
     path('companydetails/', companydetails, name='company-details'),
-    path('short_listed/', short_listed),
+    path('short_listed/', short_listed,name='sort-listed'),
 ]

@@ -35,22 +35,65 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     
+    #native apps
     'manageusers',
-    # django rest framework
-    'rest_framework',
     'companyprofile',
     'seekerbuilder',
-    # 'api',
     'job_management',
+    # django rest framework
+    'rest_framework',
+   
+    #django APS schedular
     "django_apscheduler",
+
+    #caching backend
     'django_memcached',
+
+    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', # new
+
+    #All auth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+LOGIN_REDIRECT_URL = '/'
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '372842592923-acn27ci359t8199nc1jm30526ttiken4.apps.googleusercontent.com',
+            'secret': 'Wf8QQJ8BFRZLgLaZi7EJnM7R',
+            'key': 'AIzaSyApOAdK77XdY2_pErICBpMNbGEdX19CiQA'
+        },
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,6 +121,19 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+
+
+
+AUTHENTICATION_BACKENDS = [
+ 
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+   
 ]
 
 WSGI_APPLICATION = 'jobportal.wsgi.application'
@@ -163,7 +219,7 @@ STATICFILES_DIRS = [
 ]
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 
@@ -174,3 +230,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 SCHEDULER_AUTOSTART = True
+
+
+
+# email settings
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'myacademy591@gmail.com'
+EMAIL_HOST_PASSWORD = '3atiLove'
+EMAIL_USE_TLS = True
+
+

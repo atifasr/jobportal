@@ -44,12 +44,12 @@ def get_jobs_ajax(request):
         serialized = PostSerializer(jobs, many=True)
         return JsonResponse(serialized.data, safe=False)
 
-
+from .helpers import push_data
 def home(request):
-    
-    if request.method == 'GET':
-        jobs = JobPost.objects.all()       
 
+    if request.method == 'GET':
+        jobs = JobPost.objects.all().order_by('-created_date')
+        # push_data()
         return render(request, 'manageusers/home.html', context={
             'jobs': jobs,
         })
@@ -78,7 +78,7 @@ def user_reg(request):
         contact_no = request.POST['contact_no']
         password = request.POST.get('password')
         user_type = request.POST.get('user_type')
-        
+
         user = User(gender=gender, email=email, first_name=first_name,
                     last_name=last_name, date_of_birth=date_of_birth, contact_no=contact_no,user_type=user_type)
         user.set_password(password)
@@ -150,7 +150,7 @@ def dashboard(request):
                 companies = Company.objects.all()
             except ObjectDoesNotExist:
                 print(' no data ')
-                        
+
             applicants = JobPostActivity.objects.filter(
                 job_post__job_posters=request.user)
             recent_ones = applicants.order_by('-apply_date')[:3]
@@ -170,8 +170,9 @@ def dashboard(request):
                     seeker__user=request.user)
                 edu_det = ExperienceDetail.objects.filter(
                     profile__user=request.user)
+                print(applied_posts)
             except ObjectDoesNotExist:
-               
+
                 if SeekerProfile.DoesNotExist:
                     print(' No seeker object')
                     seeker_profile = None

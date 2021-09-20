@@ -19,12 +19,12 @@ let addSkillsContainer = () =>{
     div_contain.addClass("col-md-5")
     div_contain.append(
         $("<div></div").addClass("form-group input-group").append(
-            $("<input/>").attr({"type":"text","placeholder":"skill"}).addClass("form-control")
+            $("<input/>").attr({"type":"text","placeholder":"skill name","name":"skill_name"}).addClass("form-control")
         )
     )
     let div_Select = $("<div></div>")
     div_Select.addClass("col-md-5").append(
-        $("<select></select>").addClass("custom-select").append(
+        $("<select></select>").addClass("custom-select").attr("name","skill_level").append(
             $("<option></option>").attr("value","beginner").text("beginner"),
             $("<option></option>").attr("value","intermediate").text("intermediate"),
             $("<option></option>").attr("value","advance").text("advance")

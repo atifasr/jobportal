@@ -8,11 +8,6 @@
   width: 2.8em;
 }
 
-.jobs{
-  width: 85%;
-  margin: auto;
-}
-
 .card-link{
   text-decoration: none;
   color: inherit;
@@ -23,13 +18,16 @@
 }
 
 
-.card {
-  border-radius: 2.8em;
-  margin: 0.5em;
-  width:100%;
+.jobs_cards{
+  width: 70%;
   cursor: pointer;
 }
 
+
+.recent_applicants{
+  width: 80%;
+  border-radius: 3%;
+}
 
 
 .card-title {
@@ -43,4 +41,12 @@
 
 .card-text {
   font-size: .9em;
+}
+
+.activate-btn{
+  margin-left: 50%;
+}
+
+.card-dropdown{
+  margin-left: 90%;
 }

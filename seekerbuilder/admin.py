@@ -16,10 +16,13 @@ class SeekerProfileAdmin(admin.ModelAdmin):
 
 
 class SeekerskillsetAdmin(admin.ModelAdmin):
-    list_display = ('seeker', 'skill_level')
+    list_display = ('skill_name','seeker', 'skill_level')
+
+
 
 
 admin.site.register(SeekerProfile, SeekerProfileAdmin)
 admin.site.register(ExperienceDetail)
 admin.site.register(EducationDetail, EducationDetailAdmin)
 admin.site.register(Seekerskillset, SeekerskillsetAdmin)
+

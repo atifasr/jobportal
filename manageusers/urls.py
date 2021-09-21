@@ -3,6 +3,7 @@ from django.urls import path
 
 
 app_name = 'manageusers'
+
 urlpatterns = [
     path('', home, name='home-page'),
     path('reg/', user_reg, name='user-reg'),
@@ -12,6 +13,6 @@ urlpatterns = [
     path('log_out/', log_out, name='log-out'),
     path('get_jobs/', get_jobs, name='get-jobs'),
     path('get_jobs_ajax/', get_jobs_ajax, name='get_job_aj'),
-    path('search_func/', search_func, ),
-    path('profile_view/', profile_view, name='profile_view'),
+    path('search_func/', search_func),
+    path('profile_view/<int:job_id>/', profile_view, name='profile_view'),
 ]

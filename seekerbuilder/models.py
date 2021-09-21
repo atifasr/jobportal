@@ -38,10 +38,10 @@ class SeekerProfile(models.Model):
 
     @property
     def get_resume_url(self):
-        if self.resume is not None:
+        try:
             return f"{self.resume.url}"
-        else:
-            return " "
+        except ValueError:
+            return "/"
 
 
 class ExperienceDetail(models.Model):

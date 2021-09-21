@@ -113,7 +113,7 @@
         action="/users/search_func"
         class="form-inline my-2 my-lg-0"
         method="GET"
-        class="form-data"
+        class="form-data mr-3"
       >
         <div class="form_contain">
           <input
@@ -144,17 +144,19 @@
       {% endblock %}</div>
 
     <script>
-      count = 0;
+      let count = 0;
       $("body").on("keyup", ".search_control", function (e) {
         console.log("running");
         count += 1;
         e.preventDefault();
         if (count <= 1) {
-          $(".form_contain").append(`<select name="filter" id="">
-          <option value="title">title</option>
-          <option value="company_name">Company name</option>
-          <option value="type">type</option>
-          </select>`);
+          $(".form_contain").append(
+              $('<select></select>').attr("name","filter").addClass("form-control").append(
+              $("<option></option>").attr("value","title").text("title"),
+              $("<option></option>").attr("value","company_name").text("Company name"),
+              $("<option></option>").attr("value","type").text("type")
+            )
+            );
         }
       });
 

@@ -216,7 +216,7 @@ def status_change(request):
         prof.status = status
         prof.save()
         return JsonResponse(status=200, data={
-            'message': 'okay'
+            'selected_status': status
         })
 
 

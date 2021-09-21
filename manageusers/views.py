@@ -39,8 +39,10 @@ def number_cmpy():
 @api_view(['GET'])
 def get_jobs_ajax(request):
     if request.method == 'GET':
-        jobs = JobPost.objects.all()
+        # if request.GET(''):
 
+
+        jobs = JobPost.objects.all()
         serialized = PostSerializer(jobs, many=True)
         return JsonResponse(serialized.data, safe=False)
 
@@ -48,10 +50,17 @@ from .helpers import push_data
 def home(request):
 
     if request.method == 'GET':
-        jobs = JobPost.objects.all().order_by('-created_date')
-        # push_data()
+        objects = JobPost.objects.all().order_by('-created_date')
+        p = Paginator(objects, 18)
+        if request.GET.get('page_num'):
+            page_num = request.GET.get('page_num')
+            jobs = p.page(page_num).object_list
+        else:
+            jobs = p.page(1).object_list 
+            
         return render(request, 'manageusers/home.html', context={
             'jobs': jobs,
+            'page': p
         })
 
 
@@ -116,10 +125,7 @@ def login_(request):
         if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
-            print(username)
-            print(password)
             user = authenticate(request,username=username, password=password)
-            print(user)
             if user is not None:
                 login(request, user=user)
                 log = UserLog(user=user, last_login_date=datetime.now())
@@ -135,8 +141,10 @@ def login_(request):
 # for logging out users
 def log_out(request):
     if request.method == 'GET':
-        logout(request)
+        if request.user.is_authenticated:
+            logout(request)
         return redirect('/login/')
+       
 
 
 # Hr or Seeker Dashboard
@@ -247,15 +255,10 @@ def get_jobs(request):
         return render(request, 'jobmanagment/job_details.html', context)
 
 
-def get_profile(request):
-    pass
 
-
-def profile_view(request):
+def profile_view(request,job_id):
     if request.method == 'GET':
-        id_ = request.GET.get('id')
-
-        profile = SeekerProfile.objects.get(user__id=id_)
+        profile = SeekerProfile.objects.get(user__id=job_id)
         context = {
             'profile': profile
         }

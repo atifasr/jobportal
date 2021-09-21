@@ -1,4 +1,5 @@
 
+import asyncio
 from concurrent import futures
 import requests
 from bs4 import BeautifulSoup
@@ -62,17 +63,26 @@ def modify_salary(salary_str):
     salary['salary_end']=salary_end
     return salary
  
-       
-def get_description(job_link):
+import aiohttp
+async def get_description(job_link):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
     }
-    url = f"{job_link}"
+    url = job_link
+       
+    resp = requests.get(url,headers=headers)
+    resp = BeautifulSoup(resp.content,"html.parser")
+    requirements_ = resp.find("div",class_ ="jobsearch-jobDescriptionText").find_all("p")
+    description = resp.find("div",class_ ="jobsearch-jobDescriptionText").find("ul")
+    
+
+
 
 
 
 
 #getting job data dictionary
+import asyncio
 def get_data(soup):
     job_links = soup.find_all("a",class_ = "tapItem")
 
@@ -80,6 +90,9 @@ def get_data(soup):
     job_descrip = soup.find_all("table",class_ ="jobCardShelfContainer")
     job_details_list = []
     for val,descrip,links in zip(content,job_descrip,job_links):
+       
+        # asyncio.run(get_description(f"https://in.indeed.com{links['href']}"))
+
         semi_descript = descrip.find("div",class_ = "job-snippet")
         date_ = descrip.find("span",class_ = "date")
 
@@ -137,7 +150,6 @@ def push_data():
             salary_end = ins['salary']['salary_end']
             salary_start = float(salary_strt.lstrip("₹").replace(",","").strip(" "))
             salary_end = float(salary_end.lstrip(" ₹").replace(",","").strip(" "))
-            print(salary_start,salary_end)
         except:
             salary_start = salary_end = 0
 
@@ -154,7 +166,8 @@ def push_data():
             job_description = ins['job_descrip'],
             direct_link = ins['job_link'],
             salary_start = salary_start,
-            salary_end = salary_end
+            salary_end = salary_end,
+            requirement_text = 'ins['']'
         ) 
         )
     JobPost.objects.bulk_create(job_post_list)

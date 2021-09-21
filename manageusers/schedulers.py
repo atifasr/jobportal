@@ -5,7 +5,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore
 # from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
-from .helpers import get_content
+from .helpers import push_data
  
 jobstores = {
             'default': DjangoJobStore()
@@ -20,4 +20,4 @@ job_defaults = {
     }
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors,job_defaults=job_defaults,timezone='utc')
 
-scheduler.add_job('my_job', 'interval', minutes=.3,replace_existing=True,id='this_job')
+scheduler.add_job(push_data, 'interval', minutes = .3,replace_existing=True,id='this_job')

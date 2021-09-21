@@ -92,21 +92,28 @@ def update_details(request):
 def update_edu(request):
     try:
         seeker = SeekerProfile.objects.get(user=request.user)
-        user, created = EducationDetail.objects.get_or_create(profile=seeker, defaults={
+        edu_ins, created = EducationDetail.objects.get_or_create(profile=seeker, defaults={
             'starting_date': datetime.datetime.now(),
             'completion_date': datetime.datetime.now(),
         })
     except SeekerProfile.DoesNotExist:
-        seeker = None
+        seeker = SeekerProfile()
 
     if request.method == 'POST':
-        user.profile = seeker
-        user.certificate_degree_name = request.POST['degree_name']
-        user.major = request.POST['major']
-        user.institute_university_name = request.POST['ins_university_name']
-        user.starting_date = request.POST['starting_date']
-        user.completion_date = request.POST['completion_date']
-        user.save()
+        certificate_degree_name = request.POST['degree_name']
+        major = request.POST['major']
+        institute_university_name = request.POST['ins_university_name']
+        starting_date = request.POST['starting_date']
+        completion_date = request.POST['completion_date']
+        
+        edu_ins.profile = seeker
+        edu_ins.certificate_degree_name = certificate_degree_name
+        edu_ins.major = major
+        edu_ins.institute_university_name = institute_university_name
+        edu_ins.starting_date = starting_date
+        edu_ins.completion_date = completion_date
+        edu_ins.save()
+    
 
         skill_names = request.POST.getlist('skill_name')
         skill_levels = request.POST.getlist('skill_level')
@@ -128,7 +135,7 @@ def update_edu(request):
 
     return render(request, 'manageusers/application_form.html', context={
         'type': 'updateeducation',
-        'applicant': user,
+        'applicant': edu_ins,
     })
 
 

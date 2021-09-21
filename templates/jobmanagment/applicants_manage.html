@@ -4,56 +4,65 @@
 
 <h1>Applied applicants</h1>
 
-<table class="contain">
-  {% if applicants %}
-  <thead>
-    <tr class="header_row">
-      <th scope="col">#</th>
-      <th scope="col">username</th>
-      <th scope="col">applied date</th>
-      <th scope="col">status</th>
-      <th scope="col">job title</th>
-    </tr>
-    </thead>
- 
-  {% endif %}
-  
+<div class="row">
+  <div class="row">
+    <div class="col-md-12 message_sec">
 
-  {% for val in applicants %}
-
-  <tr>
-    <td>
-      <a href="/users/profile_view/?id={{val.user.id}}"
-        >{{val.user.first_name | capfirst }}</a
-      >
-    </td>
-    <td>{{val.apply_date}}</td>
-    <td>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <table class=" table contain">
+      {% if applicants %}
+      <thead>
+        <tr class="header_row">
+          <th scope="col">username</th>
+          <th scope="col">Applied date</th>
+          <th scope="col">application status</th>
+          <th scope="col">job type</th>
+          <th scope="col">job title</th>
+        </tr>
+        </thead>
+     
+      {% endif %}
       
-      <select
-        class="custom-select status_select"
-        name="{{val.job_post.title}}"
-        id="{{val.user.id}}"
-      >
-        <option selected="{{val.status}}" >
-          {{val.status}}
-        </option>
-        <option selected value="onhold">Onhold</option>
-        <option value="selected">Selected</option>
-        <option value="rejected">Rejected</option>
-      </select>
-    </td>
-    <td>
-      <b>{{val.job_post.job_type}}</b>
-    </td>
-    <td>{{val.job_post.title}}</td>
-    <td>
-      <button class="btn btn-secondary">view details</button>
-    </td>
-  
-  </tr>
-  {% endfor %}
-</table>
+    
+      {% for val in applicants %}
+    
+      <tr>
+        <td>
+          <a href="{% url 'manageusers:profile_view' val.user.id %}"
+            >{{val.user.first_name | capfirst }}</a
+          >
+        </td>
+        <td>{{val.apply_date}}</td>
+        <td>
+          
+          <select
+            class="custom-select status_select"
+            name="{{val.job_post.title}}"
+            id="{{val.user.id}}"
+          >
+            <option selected="{{val.status}}" >
+              {{val.status}}
+            </option>
+            <option selected value="onhold">Onhold</option>
+            <option value="selected">Selected</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </td>
+        <td>
+          <b>{{val.job_post.job_type}}</b>
+        </td>
+        <td>{{val.job_post.title}}</td>
+        <td>
+          <button class="btn btn-secondary">view details</button>
+        </td>
+      
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
 
 <script>
   let par = document.querySelector(".ajax_list");
@@ -80,7 +89,7 @@
     console.log("working");
     console.log(job_title);
     $.ajax({
-      url: "/users/status_change/",
+      url: "/status_change/",
       type: "GET",
       contentType: "application/json",
       dataType: "json",
@@ -90,7 +99,23 @@
         job_title: job_title,
       },
       success: function (data) {
-        console.log(data);
+        console.log(data)
+        if (data.selected_status == 'selected')
+        {
+          
+          // $(".toast").toast('show');
+          console.log('selected')
+        }
+        else if (data.selected_status == 'rejected')
+        {
+
+          console.log('rejected')
+
+        }
+        else {
+          console.log('onhold')          
+        }
+        
       },
       error: function (error) {
         console.log(error);

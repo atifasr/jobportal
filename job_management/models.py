@@ -21,6 +21,8 @@ class JobPost(models.Model):
     salary_start = models.DecimalField(max_digits=10, decimal_places=2)
     salary_end = models.DecimalField(max_digits=10, decimal_places=2)
     direct_link = models.URLField(null=True,blank=True)
+    requirement_text = models.TextField(null=True)
+    
     def __str__(self):
         return str(self.title)
 
@@ -53,6 +55,7 @@ class JobType(models.Model):
 class JobTag(models.Model):
     name = models.CharField(max_length=255)
     job = models.ManyToManyField(JobPost)
+
 
 
 

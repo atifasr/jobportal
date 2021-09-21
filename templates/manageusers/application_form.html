@@ -258,36 +258,46 @@
           {% csrf_token %}
         
 
+          <div class="form-row">
+            <div class="col-md-6">
+              <label for="job_title">Job title</label>
+                <div class="form-group input-group">
+                
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                  </div>
 
-          <label for="job_title">Job title</label>
-          <div class="form-group input-group">
-           
-            <div class="input-group-prepend">
-              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                  <input
+                    name="job_title"
+                    class="form-control"
+                    placeholder="job title"
+                    type="text"
+                    value="{{applicant.job_title}}"
+                  />
+
             </div>
-
-            <input
-              name="job_title"
-              class="form-control"
-              placeholder="job title"
-              type="text"
-              value="{{applicant.job_title}}"
-            />
+            
+          
           </div>
-          <label for="company_name"> Company name </label>
-          <div class="form-group input-group">
-           
-            <div class="input-group-prepend">
-              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-            </div>
+          <div class="col-md-6">
+            <label for="company_name"> Company name </label>
+              <div class="form-group input-group">
+              
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                </div>
 
-            <input
-              name="company_name"
-              class="form-control"
-              placeholder="major"
-              type="text"
-              value="{{applicant.company_name}}"
-            />
+                <input
+                  name="company_name"
+                  class="form-control"
+                  placeholder="major"
+                  type="text"
+                  value="{{applicant.company_name}}"
+                />
+
+          </div>
+        </div>
+          
           </div>
         
           <div class="form-row">

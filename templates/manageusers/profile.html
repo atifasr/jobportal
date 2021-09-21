@@ -1,32 +1,40 @@
-{% extends 'base/base.html'%} {% block content %}
+{% extends 'base/base.html'%} 
+
+{% block content %}
 
 
-<div class="row">
+<div class="row my-3 rounded">
   <div class="col-12">
-    <img src="" class="img-fluid rounded float-left" alt="">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Profile details</h5>
-        <p class="card-text">{{profile.user.first_name}}</p>
-        <p class="card-text">Content</p>
-        <h6 class="card-subtitle mb-2 text-muted">skills</h6>
+    <div class="row">
+      <div class="col-md-6">
+      
+          <img {% if profile.photo %} src="{{profile.get_photo_url}}" {% else %} src = "" {% endif %} class="img-fluid rounded float-left" alt="noimage">
+     
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text">{{profile.user.first_name}} - {{profile.user.last_name}}</p>
+            <p class="card-text">Content</p>
+            <h6 class="card-subtitle mb-2 text-muted">skills</h6>
+            <div class="exp">
+              {% for skill in profile.seekerskillset_set.all %}
+          
+              <b>{{skill.skill_name}}</b> - <b>{{skill.skill_level}}</b>
+          
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+   
   </div>
 </div>
 
-
-<div class="prof">
-  <p class="name"></p>
-  <img src="" alt="this image" />
-
-  <div class="exp">
-    {% for val in experiencedetail_set %}
-
-    <p>{{val.company_name}}</p>
-
-    {% endfor %}
-  </div>
-</div>
 
 {% endblock %}

@@ -10,6 +10,5 @@ def get_applic(request):
     if request.method == 'GET':
         applied_candi = JobPostActivity.objects.filter(
             job_post__creater=request.user)
-        print(request.user.username)
         serializer_data = JobactivitySerializer(applied_candi, many=True)
         return JsonResponse(serializer_data.data, safe=False)

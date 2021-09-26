@@ -46,7 +46,8 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="date">Date of birth</label>
-              <input name="date_of_birth" type="date" class="form-control" id="date" value="{{request.user.date_of_birth}}">
+              {{request.user.date_of_birth}}
+              <input name="date_of_birth" type="date" class="form-control" id="date" value="{{request.user.date_of_birth|date:'d/m/Y'}}">
             </div>
           </div>
           <div class="form-row">
@@ -56,7 +57,7 @@
                   <span class="input-group-text" id="inputGroupFileAddon01">Profile pic</span>
                 </div>
                 <div class="custom-file">
-                  <input  name="photo" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" value="{{prof.get_photo_url}}">
+                  <input  name="photo" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" {% if prof.photo %} value="{{prof.get_photo_url}}" {% endif %}>
                   <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                 </div>
               </div>
@@ -212,26 +213,65 @@
 
          <button type="button" class="btn btn-secondary my-2 add_ins">Add institute <i class="fas fa-plus"></i></button>
 
-         <div class="form-row main-contain">
-          <div class="col-md-5">
 
-           <label for="ins_university_name"> Skill</label>
-           <div class="form-group input-group">
- 
-             <input name="skill_name" type="text" class="form-control" placeholder="skill name">
+         <div class="row">
+           <div class="col-md-8">
+            <h3>Skills</h3>
            </div>
+         </div>
+         <div class="form-row">
+           
+           {% for skills in seeker_skills %}
+           <div class="col-md-4">
+            <button class="btn btn-info mx-2">{{skills.skill_name}}<span class="badge badge-dark ">{{skills.skill_level}}</span></button><span><i class="fas fa-trash-alt delete_skill" data-attr={{skills.id}} style="cursor: pointer;"></i></span>
+           </div>
+           {% endfor %}
+           
+         </div>
+
+          <!-- Skill Modal -->
+          <div class="modal fade" id="skill_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content save_contain">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Add skills</h5>
+                </div>
+                <div class="modal-body">
+                  <div class="form-row main-contain">
+                    <div class="col-md-5">
+          
+                     <label for="ins_university_name"> Skill</label>
+                     <div class="form-group input-group">
+           
+                       <input name="skill_name" type="text" class="form-control skill_name" placeholder="skill name">
+                     </div>
+                    </div>
+          
+                    <div class="col-md-5">
+                      <label for="ins_university_name"> Skill level</label>
+                      <select name="skill_level" class="custom-select">
+                        <option selected value="beginner">Beginner</option>
+                        <option value="intermediate">intermediate</option>
+                        <option value="advance">advance</option>
+                      </select>
+                    </div>
+                    <div class="colmd-2">
+                      <a href="" class="btn btn-secondary add_skill_grp"><i class="fas fa-plus"></i></span></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary save_details" data-user = {{request.user}} >Save changes</button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="col-md-5">
-            <label for="ins_university_name"> Skill level</label>
-            <select name="skill_level" class="custom-select">
-              <option selected value="beginner">Beginner</option>
-              <option value="intermediate">intermediate</option>
-              <option value="advance">advance</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button type="button" class="btn btn-secondary add_skill_grp"><i class="fas fa-plus"></i></button>
+          <!-- add_skill_grp -->
+
+        <div class="form-row my-3">
+          <div class="col-md-8">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#skill_model" >add skill <span><i class="fas fa-plus"></i></span></button>
           </div>
         </div>
 
@@ -366,4 +406,5 @@
 
 {% block scripts %}
   <script src="{% static 'js/update_details.js' %}"></script>
+ 
 {% endblock %}

@@ -61,6 +61,11 @@
         <h5 class="card-subtitle mb-2 text-muted">{{val.salary_start}} - {{val.salary_end}}</h5>
         <p class="card-text">{{val.job_description}}</p>
       </div>
+      
+
+      <div class="card-text ml-3">
+        created_date : <h5 class="card-subtitle mb-2 text-muted">{{val.created_date}}</h5>
+      </div>
     </div>
     
     {% endfor %}
@@ -95,14 +100,19 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Your Email address</h5>
+        <h5 class="modal-title" id="exampleModalCenterTitle">Subscribe for job alerts!</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <input type="email" class="form-control mb-3">
-        <a href="#" class="btn btn-secondary">Save changes</a>
+        <div class="form-row">
+          <div class="col-md-12">
+            <input name="email_subs" type="email" class="form-control mb-3">
+            <a href="#" class="btn btn-secondary ">Activate </a>
+          </div>
+        </div>
+       
       </div>  
     </div>
   </div>
@@ -126,20 +136,26 @@
 </nav>
 
 <script>
-  $(document).ready(function () {
-    $.ajax({
-      url: "/get_jobs_ajax/",
-      type: "GET",
-      contentType: "application/json",
-      dataType: "json",
-      success: function (data) {
-        console.log(data);
-      },
-      error: function (xhr) {
-        console.log(xhr.error);
-      },
-    });
-  });
+  // get jobs on click 
+
+  // $(document).ready(function () {
+
+
+    
+  //   $.ajax({
+  //     url: "/get_jobs_ajax/",
+  //     type: "GET",
+  //     contentType: "application/json",
+  //     dataType: "json",
+  //     success: function (data) {
+  //       console.log('data recieved')
+  //       console.log(data);
+  //     },
+  //     error: function (xhr) {
+  //       console.log(xhr.error);
+  //     },
+  //   });
+  // });
 </script>
 
 {% endblock %}

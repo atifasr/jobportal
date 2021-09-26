@@ -15,4 +15,5 @@ urlpatterns = [
     path('status_change/', status_change, name='status-change'),
     path('companydetails/', companydetails, name='company-details'),
     path('short_listed/', short_listed,name='sort-listed'),
+    path('saved_jobs/', saved_jobs,name='saved-jobs'),
 ]

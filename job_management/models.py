@@ -31,7 +31,7 @@ class JobPost(models.Model):
         return f'{self.job_posters.all()}'
 
 
-# locations for a particular post
+# location for a particular post
 class JobLocation(models.Model):
     address = models.TextField()
     city = models.CharField(max_length=25)
@@ -39,6 +39,7 @@ class JobLocation(models.Model):
     country = models.CharField(max_length=25)
     zip_code = models.CharField(max_length=25)
     job = models.ForeignKey(JobPost, on_delete=models.CASCADE,null=True)
+    
     def __str__(self):
         return self.city
 
@@ -98,6 +99,18 @@ class Job_Skillset(models.Model):
 class SavedJobs(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     job = models.ForeignKey(JobPost,on_delete=models.CASCADE,null=True)
-
+    date_saved = models.DateTimeField(auto_now_add=True,null=True)
     def __str__(self):
         return self.job.title
+
+
+
+
+
+class ReportedJobs(models.Model):
+    user = models.ManyToManyField(User)
+    job = models.ForeignKey(JobPost,on_delete=models.CASCADE)
+    date_reported = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.job.title}"

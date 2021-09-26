@@ -108,7 +108,7 @@
         </div>
 
           <!-- row for charts and graphs  -->
-      <div class="row">
+      <div class="row mt-2">
         <div class="col-md-8">
           <div class="row justify-content-center">
             <div class="col-md-10" style="position: relative;">
@@ -123,14 +123,12 @@
               </div>
             </div>
           </div>
-          
-
-    </div>
+      </div>
 
 
      <!-- row for tables and stuff -->
      <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
 
 
         <table class="table table-light">
@@ -152,7 +150,7 @@
         </table>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-6">
        <div class="row">
         <div class="col-md-12" style="position: relative;">
           <canvas id="line_chart" >
@@ -213,7 +211,7 @@
         <a href="{% url 'manageusers:get-jobs' %} " value="3">
           <button class="btn btn-primary">
             Jobs applied for
-            <span class="badge badge-light">{{applied_posts.count}}</span>
+            <span class="badge badge-info">{{applied_posts.count}}</span>
           </button>
     </a>
       
@@ -237,8 +235,9 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-8">
-            
+            {% if request.user.seekerprofile.photo %}
             <img class="img-fluid rounded" src="{{ request.user.seekerprofile.photo.url }}" alt="">
+            {% endif %}
           </div>
         </div>
         <table class="table">
@@ -281,7 +280,7 @@
         </table>
         <div class="row">
           <div class="col-md-6">
-            <p>Saved jobs <span class="badge badge-pill badge-primary">7</span></p>
+            <p><a href="{% url 'jobmanage:saved-jobs' %}?user={{request.user.username}}">Saved jobs </a><span class="badge badge-pill badge-primary">7</span></p>
           </div>
 
           <div class="col-md-6">

@@ -1,0 +1,32 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+       
+
+{% block content %}
+
+
+<h3>saved jobs</h3>
+<table class="table">
+    <thead>
+      <tr>
+        
+        <th scope="col">Name</th>
+        <th scope="col">job details</th>
+        
+      </tr>
+    </thead>
+
+    <tbody>
+        {% for job in saved_job %}
+      <tr>
+        <td>{{job.job.title}} <p>
+            {{job.date_saved}}
+        </p></td>
+        <td><a href="{% url 'jobmanage:job-det' job.job.id %}" class="btn btn-secondary">view</a></td>
+        
+      </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock  %}

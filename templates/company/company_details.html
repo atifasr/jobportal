@@ -41,9 +41,15 @@
       {% if not applied %}
       <div class="row">
         <div class="col-12">
+          {% if job_det.direct_link %}
+          <a href="{{job_det.direct_link}}">
+            <button class="btn btn-primary">Apply now</button></a
+          >
+          {% else %}
           <a href="{% url 'jobmanage:apply-job' job_det.id %}">
             <button class="btn btn-primary">Apply now</button></a
           >
+          {% endif %}
         </div>
       </div>
       {% else %}

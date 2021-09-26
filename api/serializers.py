@@ -21,7 +21,7 @@ class JoblocationSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    job_loc = JoblocationSerializer()
+    job_loc = JoblocationSerializer(source='joblocation_set',many= True)
     cmpny_name = CompanySerializer()
 
     class Meta:

@@ -228,3 +228,21 @@ def short_listed(request):
             'selected_candid': selected_candid
         }
         return render(request, 'jobmanagment/applicants_manage.html', context)
+
+
+
+
+def saved_jobs(request):
+    if request.method == 'GET':
+        if request.GET.get('user'):
+            user = request.GET.get('user')
+            print(user)
+            saved_jobs = SavedJobs.objects.filter(user__username = user)
+        else:
+            user = saved_jobs = None
+            messages.add_message(request,messages.INFO,"No saved jobs")
+        
+        context = {
+            'saved_job' : saved_jobs
+        }
+        return render(request,"manageusers/saved_jobs.html",context)

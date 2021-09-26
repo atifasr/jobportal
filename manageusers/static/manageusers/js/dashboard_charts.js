@@ -1,6 +1,6 @@
 var ctx = document.getElementById('myChart').getContext('2d');
 
-let lineGraph = document.getElementById('line_graph').getContext('2d');
+
 
 var myChart = new Chart(ctx, {
     type: 'bar',
@@ -78,25 +78,25 @@ let pie_chart = new Chart(pieChart,config)
 
 
 // line chart
-// let line_chart = document.getElementById('line_chart').getContext('2d')
+let lineGraph = document.getElementById('line_chart').getContext('2d');
 
-// const labels = Utils.months({count: 7});
-// const data = {
-//   labels: labels,
-//   datasets: [{
-//     label: 'My First Dataset',
-//     data: [65, 59, 80, 81, 56, 55, 40],
-//     fill: false,
-//     borderColor: 'rgb(75, 192, 192)',
-//     tension: 0.1
-//   }]
-// };
-
-
-// const config = {
-//     type: 'line',
-//     data: data,
-//   };
+const labels = [1,2,3,4,5];
+const data2 = {
+  labels: labels,
+  datasets: [{
+    label: 'My First Dataset',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  }]
+};
 
 
-// let lineChart = new Chart(line_chart,config) 
+const config2 = {
+    type: 'line',
+    data: data,
+  };
+
+
+let lineChart = new Chart(lineGraph,config2) 

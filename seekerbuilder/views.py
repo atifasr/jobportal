@@ -1,4 +1,6 @@
 
+import json
+from job_management.models import Job_Skillset
 from manageusers.models import Address
 from django.contrib import messages
 from .models import SeekerProfile, ExperienceDetail, EducationDetail
@@ -96,8 +98,11 @@ def update_edu(request):
             'starting_date': datetime.datetime.now(),
             'completion_date': datetime.datetime.now(),
         })
+        seeker_skills = Seekerskillset.objects.filter(seeker = seeker)
+        print(seeker_skills)
     except SeekerProfile.DoesNotExist:
         seeker = SeekerProfile()
+        seeker_skills = Seekerskillset()
 
     if request.method == 'POST':
         certificate_degree_name = request.POST['degree_name']
@@ -112,30 +117,14 @@ def update_edu(request):
         edu_ins.institute_university_name = institute_university_name
         edu_ins.starting_date = starting_date
         edu_ins.completion_date = completion_date
-        edu_ins.save()
-    
-
-        skill_names = request.POST.getlist('skill_name')
-        skill_levels = request.POST.getlist('skill_level')
-        print(skill_levels)
-        Seeker_Skill_list = []
-        for skill_name, skill_level in zip(skill_names,skill_levels):
-            print(skill_name,skill_level)
-            Seeker_Skill_list.append(
-                Seekerskillset(
-                    seeker = seeker,
-                    skill_name = skill_name,
-                    skill_level = skill_level                
-                )
-            )
-        Seekerskillset.objects.bulk_create(Seeker_Skill_list)
-        
+        edu_ins.save()        
 
         return redirect('/dashboard/')
 
     return render(request, 'manageusers/application_form.html', context={
         'type': 'updateeducation',
         'applicant': edu_ins,
+        'seeker_skills':seeker_skills
     })
 
 
@@ -148,20 +137,13 @@ def update_exper(request):
         })
     except ObjectDoesNotExist:
         user = None
-        pass
+       
     if request.method == 'POST':
-        # try:
-        #     user = EducationDetail.objects.get(profile=seeker)
-        # except(ObjectDoesNotExist):
-        #     user = EducationDetail()
         user.profile = seeker
-        user.start_date = request.POST['start_date']
-        user.end_date = request.POST['end_date']
+        user.start_date = request.POST.get('starting_date')
+        user.end_date = request.POST.get('completion_date')
         user.job_title = request.POST['job_title']
         user.company_name = request.POST['company_name']
-        user.job_location_state = request.POST['job_location_state']
-        user.job_location_city = request.POST['job_location_city']
-        user.job_location_country = request.POST.get('job_location_country')
         user.description = request.POST.get('description')
         user.save()
         return redirect('/dashboard/')
@@ -190,9 +172,48 @@ def save_job(request):
         job_created_ins,created = SavedJobs.objects.get_or_create(user= user_ins,job=job_ins)
         if not created:
             saved_status['saved'] = True
-            print('job is already saved')
         else:
             saved_status['saved'] = False
-        print(id,user_job)
-        print('working')
         return JsonResponse(saved_status,safe='False')
+
+
+
+
+@csrf_exempt
+def delete_skill(request):
+    if request.method == 'POST':
+        data = {}
+        
+        job_id = request.body.decode('utf-8')
+        job_id = json.loads(job_id)
+        job_id = int(job_id['skill_id'])
+        try:
+            Seekerskillset.objects.get(id=job_id).delete()
+            data['status'] = 'deleted'
+        except ObjectDoesNotExist:
+            data['status'] = 'nodata'
+        return JsonResponse(data,safe=False)
+
+
+
+@csrf_exempt
+def add_skill(request):
+    if request.method == "POST":
+        seeker_skills = request.body.decode('utf-8')
+        seeker_skills = json.loads(seeker_skills)
+        job_skill_list = []
+        seeker_prof = SeekerProfile.objects.get(user=request.user)
+        for skill_ins in seeker_skills:
+            job_skill_list.append(
+                Seekerskillset(
+                    seeker = seeker_prof,
+                    skill_name = skill_ins['skill_name'],
+                    skill_level = skill_ins['skill_level']
+                )
+            )
+        Seekerskillset.objects.bulk_create(job_skill_list)
+
+        resp ={
+            'status':'updated'
+        }
+        return JsonResponse(resp,safe=False)

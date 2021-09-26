@@ -39,8 +39,6 @@ def number_cmpy():
 @api_view(['GET'])
 def get_jobs_ajax(request):
     if request.method == 'GET':
-        # if request.GET(''):
-
 
         jobs = JobPost.objects.all()
         serialized = PostSerializer(jobs, many=True)
@@ -221,25 +219,30 @@ def search_func(request):
         context = {}
 
         if filter_type == 'title':
-            print(f'filter is {filter_type}')
+        #    search by title
             fltrd_obj = JobPost.objects.filter(
                 title__icontains=filter_srch)
-            context['jobs'] = fltrd_obj
-            messages.success(request, 'Matching results')
+
         elif filter_type == 'company_name':
-            # cmpny_name
+            # search by company name
             fltrd_obj = JobPost.objects.filter(
                 cmpny_name__name__icontains=filter_srch)
-            print(fltrd_obj)
-            print(f'filter is {filter_type}')
-            context['jobs'] = fltrd_obj
-            messages.success(request, 'Matching results')
+           
+           
         else:
             fltrd_obj = JobPost.objects.filter(
                 job_type__job_type__icontains=filter_srch)
-            print(fltrd_obj)
-            print(f'filter is {filter_type}')
-            context['jobs'] = fltrd_obj
+            
+        
+        p = Paginator(fltrd_obj,18)
+        if request.GET.get('page_num'):
+            page_num = request.GET.get('page_num')
+            jobs = p.page(page_num).object_list
+        else:
+            jobs = p.page(1).object_list 
+
+        context['jobs'] = jobs
+        messages.success(request,messages.INFO, "Matching results")
 
         return render(request, 'manageusers/home.html', context)
 
@@ -248,7 +251,6 @@ def search_func(request):
 def get_jobs(request):
     if request.method == 'GET':
         jobs_applied = JobPostActivity.objects.filter(user=request.user)
-        print(jobs_applied)
         context = {
             'jobs_applied': jobs_applied
         }

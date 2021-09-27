@@ -345,13 +345,15 @@
               <div class="form-group input-group">
                    
                 <div class="form-group">
-                  <label for="description">Job description</label>
-                  <textarea
-                    id="my-textarea"
-                    class="form-control"
-                    name="description"
-                    rows="3"
-                  ></textarea>
+                    <label for="description">Job description</label>
+                    <textarea
+                        id="my-textarea"
+                        class="form-control"
+                        name="description"
+                        rows="3"
+                    >
+                    {{applicant.description}}
+                  </textarea>
                 </div>
               </div>
 
@@ -382,6 +384,12 @@
                 value="{{applicant.completion_date}}"
               />
             </div>
+           </div>
+           <div class="form-row">
+             <div class="col-md-4">
+               <label for="total_exp">total experience in years</label>
+               <input type="text" class="form-control">
+             </div>
            </div>
 
            <button type="button" class="btn btn-secondary my-2 add_ins">Add company <i class="fas fa-plus"></i></button>

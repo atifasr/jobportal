@@ -1,4 +1,5 @@
 from copy import error
+import json
 from typing import ContextManager
 
 from pytz import timezone
@@ -9,7 +10,7 @@ from django.http.response import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, resolve_url
 
 from django.http import request
-from .models import User, UserLog ,Address
+from .models import User, UserLog ,Address,Messages
 from companyprofile.models import Company
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -265,3 +266,23 @@ def profile_view(request,job_id):
             'profile': profile
         }
         return render(request, 'manageusers/profile.html', context)
+
+
+
+@csrf_exempt
+def send_message(request):
+    if request.method == 'POST':
+        resp = {}
+        resp_data = request.body.decode('utf-8')
+        resp_data = json.loads(resp_data)
+        receiver = User.objects.get(username = resp_data['receiver'])
+        sender = User.objects.get(username = resp_data['sender'])
+        message = resp_data['message']
+        Messages.objects.create(
+            sender = sender,
+            receiver = receiver,
+            message = message    
+        )
+        print(resp_data)
+        resp['status'] = 'sent'
+        return JsonResponse(resp,safe=False)

@@ -16,7 +16,7 @@
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
     crossorigin="anonymous"
-  />
+    />
     
     
     
@@ -95,6 +95,11 @@
             >Dashboard</a
           >
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href=""
+            ><i class="fas fa-inbox"></i> Messages <span class="badge rounded-pill bg-danger">0</span></a
+          >
+        </li>
         {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'manageusers:login' %}">Login</a>
@@ -111,7 +116,7 @@
       </ul>
       <form
         action="/search_func/"
-        class="form-inline my-2 my-lg-0"
+        class="form-inline my-2 mr-3 my-lg-0"
         method="GET"
         class="form-data mr-3"
       >
@@ -120,7 +125,7 @@
             name="search_text"
             class="form-control mr-sm-2 search_control"
             type="search"
-            placeholder="Search"
+            placeholder="search for more jobs"
             aria-label="Search"
           />
 
@@ -129,7 +134,7 @@
             class="btn btn-outline-success my-2 my-sm-0 search_btn"
             type="submit"
           >
-            Search
+          <i class="fa fa-search" aria-hidden="true"></i>
           </button>
         </div>
       </form>
@@ -166,7 +171,7 @@
     </script>
 
     {% block scripts %}
-
+      <script src="{% static 'js/messages.js' %}"></script>
     {% endblock %}
   </body>
 </html>

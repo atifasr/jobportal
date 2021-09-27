@@ -98,15 +98,6 @@ delete_class_list.click(function(e){
     })
 })
 
-// let len = delete_class_list.length
-// for ( let i = 0 ; i< len ; i++)
-// {
-//     delete_class_list[i].bind('click',function(){
-//         e.preventDefault()
-//         console.log('working')
-//     })
-
-// }
 
 
 
@@ -116,8 +107,7 @@ delete_class_list.click(function(e){
 
 
 
-
-// saving and updating skills
+// saving and updating seeker skills
 $('div.save_contain').on('click',function(e){
     e.preventDefault()
     let select_list = $('select.custom-select')
@@ -126,9 +116,10 @@ $('div.save_contain').on('click',function(e){
     if (e.target.nodeName == 'BUTTON')
     {
         console.log('data updated')
+        // pushing skill data in array
         let SeekerSkillData = []
         select_list.each((ind,element)=>{
-            console.log(skill_names[ind].value,element.value)
+
             obj = {
                 skill_name : skill_names[ind].value,
                 skill_level : element.value

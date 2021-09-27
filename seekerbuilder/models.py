@@ -53,6 +53,7 @@ class ExperienceDetail(models.Model):
     job_location_state = models.CharField(max_length=50)
     job_location_city = models.CharField(max_length=50)
     job_location_country = models.CharField(max_length=60)
+    total_years = models.PositiveIntegerField(null=True,blank=True)
     description = models.TextField()
 
     class Meta:

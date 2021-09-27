@@ -27,8 +27,13 @@ class JobTypeAdmin(admin.ModelAdmin):
 class JobLocationAdmin(admin.ModelAdmin):
     list_display = ('address', 'city', 'state','job')
 
+
 class SavedJobsAdmin(admin.ModelAdmin):
     list_display = ('user', 'job')
+
+
+class JobAlertAdmin(admin.ModelAdmin):
+    list_display = ('email', 'job_type')
 
 
 
@@ -39,3 +44,4 @@ admin.site.register(JobPostActivity, JobPostActivityAdmin)
 admin.site.register(Skillset, SkillsetAdmin)
 admin.site.register(Job_Skillset, Job_SkillsetAdmin)
 admin.site.register(SavedJobs, SavedJobsAdmin)
+admin.site.register(JobAlert, JobAlertAdmin)

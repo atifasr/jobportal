@@ -16,6 +16,7 @@
 
 <div class="row">
   <div class="col-md-6 message_div">
+
     {% if messages %}
       <ul class="messages">
         {% for message in messages %}
@@ -37,7 +38,8 @@
            
          
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item save_job" href="#" data-job="{{val.id}}" data-user="{{request.user}}">Save </a>
+            <a class="dropdown-item save_job" href="#" data-job="{{val.id}}" data-user="{{request.user}}"> <i class="fas fa-save"></i> Save </a>
+            <a class="dropdown-item report_job" href="#" data-job="{{val.id}}" data-user="{{request.user}}"><i class="fas fa-flag"></i> Report </a>
           </div>
         </div>
         <a href="{% url 'jobmanage:job-det' val.id %}" <h5 class="card-title card-link">
@@ -108,8 +110,8 @@
       <div class="modal-body">
         <div class="form-row">
           <div class="col-md-12">
-            <input name="email_subs" type="email" class="form-control mb-3">
-            <a href="#" class="btn btn-secondary ">Activate </a>
+            <input name="email_subs" type="email" data-user={{request.user.username}} class="form-control mb-3 email_sub" placeholder="youremail@xyz.com">
+            <a href="#" class="btn btn-secondary sub_email">Activate </a>
           </div>
         </div>
        
@@ -163,4 +165,5 @@
 
 {% block scripts %}
 <script src="{% static 'js/save_job.js' %}"></script>
+<script src="{% static 'manageusers/js/home.js' %}"></script>
 {% endblock  %}

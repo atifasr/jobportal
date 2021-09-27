@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import *
 from seekerbuilder.models import Seekerskillset
 from django.db.models import Q
+
 # Create your views here.
 import schedule
 
@@ -36,6 +37,7 @@ def create_job(request):
         end_salary = request.POST.get('salary_end')
 
         # create job skills if not already present inside DB
+
         print(skill_names)
         skill_list = []
         for skill in skill_names:
@@ -246,3 +248,21 @@ def saved_jobs(request):
             'saved_job' : saved_jobs
         }
         return render(request,"manageusers/saved_jobs.html",context)
+
+
+from django.db.utils import IntegrityError
+def sub_emailalert(request):
+    if request.method == "GET":
+        resp = {}
+        if request.GET.get('email'):
+            email = request.GET.get('email')
+            try:
+                job_alert = JobAlert(email = email)
+                job_alert.save()
+                resp['status'] = 'updated'
+            except IntegrityError:
+                resp['status'] = 'email_dublicated'
+        else:
+           resp['status'] = 'email_error'
+
+        return JsonResponse(resp,safe=False)

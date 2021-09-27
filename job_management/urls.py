@@ -16,4 +16,5 @@ urlpatterns = [
     path('companydetails/', companydetails, name='company-details'),
     path('short_listed/', short_listed,name='sort-listed'),
     path('saved_jobs/', saved_jobs,name='saved-jobs'),
+    path('sub_emailalert/', sub_emailalert,name='sub-emailalert'),
 ]

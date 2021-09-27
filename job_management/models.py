@@ -114,3 +114,12 @@ class ReportedJobs(models.Model):
 
     def __str__(self):
         return f"{self.job.title}"
+
+
+#subscribing to job alerts 
+class JobAlert(models.Model):
+    email = models.EmailField(unique=True)
+    job_type = models.CharField(max_length=24,null=True)
+
+    def __str__(self):
+        return f"{self.email}"

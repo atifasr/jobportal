@@ -112,11 +112,6 @@ class Address(models.Model):
 
 
 
-
-
-
-
-
 # User's last login and apply date information
 class UserLog(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
@@ -124,11 +119,15 @@ class UserLog(models.Model):
     last_job_apply_date = models.DateField(auto_now=True)
 
 
+
+
 class Messages(models.Model):
     sender = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='sender', null=True)
     receiver = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='receiver', null=True)
-    message = models.TextField(blank=True)
-    dated = models.DateField(auto_now_add=True)
+    message = models.TextField(max_length=600,blank=True)
+    sent_date = models.DateField(auto_now_add=True)
     opened = models.BooleanField(default=False)
+
+

@@ -15,4 +15,5 @@ urlpatterns = [
     path('get_jobs_ajax/', get_jobs_ajax, name='get_job_aj'),
     path('search_func/', search_func),
     path('profile_view/<int:job_id>/', profile_view, name='profile_view'),
+    path('send_message/', send_message, name='send-message'),
 ]

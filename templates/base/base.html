@@ -64,55 +64,55 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"></li>
+          <li class="nav-item active"></li>
 
-        {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated %}
 
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="{% url 'manageusers:dashboard' %}"
-            id="navbarDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            {{ request.user.first_name }}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'manageusers:log-out' %}">Logout</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'manageusers:dashboard' %}"
-            >Dashboard</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href=""
-            ><i class="fas fa-inbox"></i> Messages <span class="badge rounded-pill bg-danger">0</span></a
-          >
-        </li>
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'manageusers:login' %}">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'manageusers:user-reg' %}"
-            >Register</a
-          >
-        </li>
-        {%endif%}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'manageusers:login' %}">find more companies</a>
-        </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="{% url 'manageusers:dashboard' %}"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {{ request.user.first_name }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'manageusers:log-out' %}">Logout</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'manageusers:dashboard' %}"
+                  >Dashboard</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'manageusers:message-list' %}"
+                  ><i class="fas fa-inbox"></i> Messages <span class="badge rounded-pill bg-danger">{{request.user.get_message_count}}</span></a
+                >
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'manageusers:login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'manageusers:user-reg' %}"
+                  >Register</a
+                >
+              </li>
+            {%endif%}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'manageusers:login' %}">find more companies</a>
+            </li>
       </ul>
       <form
         action="/search_func/"
@@ -143,10 +143,14 @@
   <body>
     <!-- Navigation-->
 
-    <div class="container-fluid">{% block content %} 
+    <div class="container-fluid">
+      
+      {% block content %} 
       
       
-      {% endblock %}</div>
+      {% endblock %}
+    
+    </div>
 
     <script>
 
@@ -173,5 +177,6 @@
     {% block scripts %}
       <script src="{% static 'js/messages.js' %}"></script>
     {% endblock %}
+  
   </body>
 </html>

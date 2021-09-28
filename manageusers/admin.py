@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, UserLog,Address,Messages
+from .models import User, UserLog,Address,MessageThreads,Messages
 
 # Register your models here.
 
@@ -18,12 +18,18 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('user', 'city', 'state','zip_code','street')
 
 
+class MessageThreadsAdmin(admin.ModelAdmin):
+    list_display = ('sender', 'receiver', 'created_date')
+
+
+
 class MessagesAdmin(admin.ModelAdmin):
-    list_display = ('sender', 'receiver', 'sent_date')
+    list_display = ('message_thread', 'message', 'sent_date','sent_time','opened')
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserLog, UserLogAdmin)
-admin.site.register(Messages, MessagesAdmin)
+admin.site.register(MessageThreads, MessageThreadsAdmin)
 admin.site.register(Address, AddressAdmin)
+admin.site.register(Messages, MessagesAdmin)
 

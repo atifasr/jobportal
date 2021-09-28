@@ -6,7 +6,27 @@
 
 <div class="row">
     <dic class="col-md-12">
-        <h3> Received messages </h3>
+        <h3> All threads </h3>
+        <div class="row">
+            <div class="col-md-10">
+                {% for message_thread in message_threads %}
+                <div class="card mb-2 py-3 px-3">
+                    {% if message_thread.receiver == request.user %}
+                        <h3>send by : {{message_thread.sender}}</h3>
+                    {% else %}
+                        <h3>send to : {{message_thread.receiver}}</h3>
+                    {% endif %}
+                    <div class="card-header">
+                       created on : {{message_thread.created_date}} {{message_thread.created_time}}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{message_thread.messages_set.all.last}}...</p>
+                    </div>
+                </div>
+                {% endfor %}
+                
+            </div>
+        </div>
     </dic>
 </div>
 

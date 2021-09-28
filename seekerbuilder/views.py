@@ -37,6 +37,7 @@ def update_details(request):
         curr_user.first_name = request.POST['first_name']
         curr_user.last_name = request.POST['last_name']
         curr_user.contact_no = request.POST.get('contact_no')
+        curr_user.description = request.POST.get('description')
         curr_user.date_of_birth = request.POST.get('date_of_birth')
         curr_user.gender = request.POST.get('gender')
         curr_user.save()
@@ -157,9 +158,7 @@ def update_exper(request):
 
 
 
-    #saving Jobs
-
-
+#saving Jobs
 def save_job(request):
     if request.method == 'GET':
         job_id = request.GET.get('id')
@@ -169,7 +168,7 @@ def save_job(request):
         }
         job_ins = JobPost.objects.get(id = job_id)
         user_ins = User.objects.get(username = user_job)
-        job_created_ins,created = SavedJobs.objects.get_or_create(user= user_ins,job=job_ins)
+        job_created_ins,created = SavedJobs.objects.get_or_create(user = user_ins,job=job_ins)
         if not created:
             saved_status['saved'] = True
         else:

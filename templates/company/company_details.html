@@ -1,16 +1,25 @@
 {% extends "base/base.html"%} 
 
+{% load static %}
+
+{% block css %}
+
+  <link rel="stylesheet" href="{% static 'job_management/job_detail.css' %}">
+
+{% endblock %}
+
 {% block content %} 
 
 {% if job_det %}
-<div class="row mx-3">
-  <div class="col-md-8">
+<div class="row mx-3 my-3">
+  <div class="col-md-8 job_contain">
     <p class="text-center display-3">{{job_det|capfirst }}</p>
 
     <div class="row">
       <div class="col-12">
-        <a href="/users/companydetails/?id={{job_det.cmpny_name.id}}"
-        ><h1 class="display-6">{{job_det.cmpny_name.name}}</h1></a>
+        <a href="/users/companydetails/?id={{job_det.cmpny_name.id}}" class="job_title">
+          <h1 class="display-6">{{job_det.cmpny_name.name}}</h1>
+        </a>
       </div>
     </div>
     
@@ -62,7 +71,7 @@
       </div>
       
       {% endif %} 
-      {% endif %}
+  {% endif %}
  
   </div>
 </div>

@@ -1,6 +1,7 @@
 from copy import error
 import json
 from typing import ContextManager
+from django.db.models.query_utils import Q
 
 from pytz import timezone
 
@@ -10,7 +11,7 @@ from django.http.response import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, resolve_url
 
 from django.http import request
-from .models import User, UserLog ,Address,Messages
+from .models import Messages, User, UserLog ,Address,MessageThreads
 from companyprofile.models import Company
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -50,6 +51,7 @@ def home(request):
 
     if request.method == 'GET':
         objects = JobPost.objects.all().order_by('-created_date')
+        
         p = Paginator(objects, 18)
         if request.GET.get('page_num'):
             page_num = request.GET.get('page_num')
@@ -59,7 +61,7 @@ def home(request):
             
         return render(request, 'manageusers/home.html', context={
             'jobs': jobs,
-            'page': p
+            'page': p,
         })
 
 
@@ -278,11 +280,27 @@ def send_message(request):
         receiver = User.objects.get(username = resp_data['receiver'])
         sender = User.objects.get(username = resp_data['sender'])
         message = resp_data['message']
-        Messages.objects.create(
+        message_thread,created = MessageThreads.objects.get_or_create(
             sender = sender,
-            receiver = receiver,
-            message = message    
+            receiver = receiver, defaults={
+                'sender':sender,
+                'receiver':receiver
+            }  
         )
-        print(resp_data)
+
+        Messages.objects.create(
+            message_thread = message_thread,
+            message =message
+        )
         resp['status'] = 'sent'
         return JsonResponse(resp,safe=False)
+
+
+
+def message_list(request):
+    if request.method == "GET":
+        message_threads = MessageThreads.objects.filter(Q(sender = request.user) | Q(receiver = request.user)).order_by('-created_date')
+        print(message_threads)
+        return render(request,'manageusers/messages.html',{
+            'message_threads':message_threads
+        })

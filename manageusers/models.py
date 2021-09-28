@@ -1,3 +1,6 @@
+from datetime import date, time
+import datetime
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 # Create your models here.
@@ -12,6 +15,7 @@ from django.db.models.expressions import Case
 from django.db.models.fields.related import ForeignKey
 from django.forms import widgets
 from companyprofile.models import Company
+
 
 from django.conf import settings
 # Create your models here.
@@ -93,6 +97,14 @@ class User(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
+    @property
+    def get_message_count(self):
+        try:
+            messages_count = Messages.objects.filter(message_thread__receiver = self,opened=False).count()
+        except ObjectDoesNotExist:
+            messages_count = 0
+        return messages_count
+
     def save(self, *args, **kwargs):
         if self.email:
             self.username = self.email.split('@')[0]
@@ -121,13 +133,28 @@ class UserLog(models.Model):
 
 
 
-class Messages(models.Model):
+class MessageThreads(models.Model):
     sender = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='sender', null=True)
     receiver = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='receiver', null=True)
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+
+
+    
+
+
+
+class Messages(models.Model):
+    message_thread = models.ForeignKey(MessageThreads,on_delete=models.CASCADE,null=True)
     message = models.TextField(max_length=600,blank=True)
     sent_date = models.DateField(auto_now_add=True)
+    sent_time = models.TimeField(auto_now_add=True)
     opened = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.message[:10]}"
+
 
 

@@ -17,6 +17,7 @@ class SeekerProfile(models.Model):
     photo = models.ImageField(upload_to='applicants/profile_pictures',blank=True, null=True)
     resume = models.FileField(upload_to='applicants/documents',blank=True)
     contact_no = models.IntegerField(null=True)
+    description = models.TextField()
 
     class Meta:
         verbose_name_plural  = "Seekers' profile"

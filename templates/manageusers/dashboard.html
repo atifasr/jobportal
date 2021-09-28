@@ -235,9 +235,13 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-8">
-            {% if request.user.seekerprofile.photo %}
-            <img class="img-fluid rounded" src="{{ request.user.seekerprofile.photo.url }}" alt="">
-            {% endif %}
+            <p>
+              {% if request.user.seekerprofile.photo %}
+              <img class="img-fluid rounded prof_pic" src="{{ request.user.seekerprofile.photo.url }}" alt="">
+              {% endif %}
+              {{request.user.seekerprofile.decription}}
+            </p>
+            
           </div>
         </div>
         <table class="table">

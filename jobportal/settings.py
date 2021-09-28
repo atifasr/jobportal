@@ -39,7 +39,11 @@ DEBUG = True
 
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*',
+    'job-portal2456.herokuapp.com',
+    '127.0.0.1'
+]
 
 
 # Application definition

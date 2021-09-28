@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from .secret import *
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -260,3 +261,10 @@ EMAIL_HOST_PASSWORD = g_pass
 EMAIL_USE_TLS = True
 
 
+
+in_heroku = False
+if 'DATABASE_URL' in os.environ:
+    in_heroku = True
+
+if in_heroku:
+   DATABASES['default'] = dj_database_url.config()

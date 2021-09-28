@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@700&display=swap");
+
+.top_bar a {
+  padding: 3;
+  background-color: rgb(172, 181, 192);
+  border-radius: 2em;
+  border: none;
+  font-family: "Open Sans Condensed", sans-serif;
+}
+
+.top_bar .btn:hover {
+  background-color: rgb(138, 142, 146);
+}
+
+.card {
+  border-radius: 2em;
+}
+
+
+.recent_applies{
+  margin-left: 20%;
+  height: 40vh;
+}
+
+
+.prof_pic{
+  float: left;
+}
+
+
+/* Hr dashboard tiles */
+
+.card_tiles{
+  border-radius: 2%;
+}

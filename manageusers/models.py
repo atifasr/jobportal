@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,null=True,blank=True)
     user_type = models.CharField(max_length=255, choices=USER_TYPE,default=JOB_SEEKER)
     gender = models.CharField(max_length=22,blank=True,null=True)
-    contact_no = models.IntegerField(null=True)
+    contact_no = models.CharField(max_length=30, null=True)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,

@@ -16,7 +16,7 @@ class SeekerProfile(models.Model):
     currency = models.CharField(max_length=25,blank=True,null=True)
     photo = models.ImageField(upload_to='applicants/profile_pictures',blank=True, null=True)
     resume = models.FileField(upload_to='applicants/documents',blank=True)
-    contact_no = models.IntegerField(null=True)
+    contact_no = models.CharField(max_length=30,null=True)
     description = models.TextField()
 
     class Meta:

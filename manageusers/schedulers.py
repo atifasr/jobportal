@@ -20,4 +20,4 @@ job_defaults = {
     }
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors,job_defaults=job_defaults,timezone='utc')
 
-scheduler.add_job(push_data, 'interval', minutes = .3,replace_existing=True,id='this_job')
+scheduler.add_job(push_data, 'interval', hours = 2,replace_existing=True,id='this_job')

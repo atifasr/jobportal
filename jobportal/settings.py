@@ -14,20 +14,30 @@ from pathlib import Path
 import os
 from .secret import *
 import dj_database_url
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, True)
+)
+
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.secret'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = key
+SECRET_KEY = os.environ.get('key',env('key'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -81,9 +91,9 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': Google_client_id,
-            'secret': Google_secret,
-            'key': Api_Key
+            'client_id': os.environ.get('Google_client_id',env('Google_client_id')),
+            'secret': os.environ.get('Google_secret',env('Google_secret')),
+            'key': os.environ.get('Api_Key',env('Api_Key'))
         },
         "SCOPE": [
             "profile",
@@ -257,7 +267,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'myacademy591@gmail.com'
-EMAIL_HOST_PASSWORD = g_pass
+EMAIL_HOST_PASSWORD = os.environ.get('g_pass',env('g_pass'))
 EMAIL_USE_TLS = True
 
 

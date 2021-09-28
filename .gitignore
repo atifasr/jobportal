@@ -27,7 +27,6 @@ jobportal/secret.py
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/

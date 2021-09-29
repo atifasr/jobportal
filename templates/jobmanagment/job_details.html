@@ -10,7 +10,7 @@
         <div class="col-md-8">
           <div class="card" style="width: 50rem">
             <div class="card-body">
-              <h5 class="card-title">{{val.title}}</h5>
+              <h5 class="card-title"><a href="{% url 'jobmanage:job-det' val.id %}">{{val.title}}</a></h5>
               <h6 class="card-subtitle mb-2 text-muted">{{val.job_type}}</h6>
               <a href="{% url 'jobmanage:update-post' val.id %}"
                 ><button class="btn btn-primary">Update</button></a

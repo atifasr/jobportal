@@ -50,7 +50,7 @@ def update_details(request):
         user.photo = request.FILES.get('photo')
         user.save()
 
-
+        
         #updating address
         city = request.POST.getlist('city')
         state = request.POST.getlist('state')

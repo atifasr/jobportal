@@ -46,10 +46,10 @@ def create_job(request):
                 'skill_name' : skill
             })
             skill_list.append(skill)
-        
+
         job_descrip = request.POST['job_descrip']
         job_skill_ = request.POST.getlist('job_skill_level')
-        job_pst = JobPost.objects.create(title=job_title, 
+        job_pst = JobPost.objects.create(title=job_title,
                           cmpny_name=company, job_description=job_descrip, salary_start=start_salary,salary_end=end_salary)
         job_pst.job_posters.add(request.user)
         job_pst.save()
@@ -65,12 +65,12 @@ def create_job(request):
             job_skill_set.append(
                 Job_Skillset(
                     skill_name=job_skill_name,
-                    job_post=job_pst, 
+                    job_post=job_pst,
                     skill_level=job_level
                     )
                 )
         Job_Skillset.objects.bulk_create(job_skill_set)
-        
+
         messages.add_message(request,messages.SUCCESS,'Job post successfully submitted!')
         return redirect('/dashboard/')
 
@@ -134,11 +134,12 @@ def apply_job(request, job_id):
             if SeekerProfile.DoesNotExist:
                 messages.add_message(request,messages.INFO,'Kindly add the profile first')
 
-        return redirect(request.META['HTTP_REFERER'])
+        return redirect('/dashboard/')
 
 
 def manage_jobs(request):
     jobs_created = JobPost.objects.filter(job_posters=request.user)
+    #deleting a particular jobpost on delte click
     if request.GET.get('job'):
         job_id = request.GET.get('job')
         JobPost.objects.filter(id = job_id).delete()
@@ -156,7 +157,7 @@ def update_post(request, job_id):
         job_location = JobLocation.objects.get(job = job_post)
     except ObjectDoesNotExist:
         job_location = JobLocation()
-   
+
     if request.method == 'POST':
         job_post.job_title = request.POST.get('title')
         company_name = request.POST.get('company_name')
@@ -181,7 +182,7 @@ def update_post(request, job_id):
         job_location.zip_code = zip_code
         job_location.save()
 
-        
+
         messages.add_message(request,messages.SUCCESS,'job details updated! ')
         return redirect('/dashboard/')
 
@@ -196,8 +197,6 @@ def update_post(request, job_id):
 
 # shortlisting candidates
 # ----------------------------
-
-
 def manage_applic(request):
     if request.method == 'GET':
         # getting onhold candidates
@@ -227,6 +226,7 @@ def status_change(request):
         })
 
 
+#retreiving shortlisted candidates
 def short_listed(request):
     if request.method == 'GET':
         selected_candid = JobPostActivity.objects.filter(
@@ -238,7 +238,7 @@ def short_listed(request):
 
 
 
-
+#saving jobs 
 def saved_jobs(request):
     if request.method == 'GET':
         if request.GET.get('user'):
@@ -248,7 +248,7 @@ def saved_jobs(request):
         else:
             user = saved_jobs = None
             messages.add_message(request,messages.INFO,"No saved jobs")
-        
+
         context = {
             'saved_job' : saved_jobs
         }
@@ -256,7 +256,7 @@ def saved_jobs(request):
 
 
 
-
+#signing up for nrwsletter
 from django.db.utils import IntegrityError
 def sub_emailalert(request):
     if request.method == "GET":
@@ -278,7 +278,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 #apply for scrapped jobs
 @csrf_exempt
-def apply_job(request):
+def apply_job_in(request):
     if request.method == "POST":
         resp ={}
         job_id = json.loads(request.body.decode('utf-8'))['job_id']

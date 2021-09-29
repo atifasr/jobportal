@@ -10,7 +10,7 @@ Applybutton.addEventListener('click',(e)=>{
     let jobpost_id = e.target.getAttribute('data-job')
     console.log(jobpost_id)
     $.ajax({
-        url: '/apply_job/',
+        url: '/apply_job_in/',
                 method : 'POST',
                 dataType: 'json',
                 data:JSON.stringify(

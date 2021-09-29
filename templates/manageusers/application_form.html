@@ -1,5 +1,5 @@
 
-{% extends "base/base.html" %} 
+{% extends "base/base.html" %}
 {% load static %}
 
 {% block css %}
@@ -11,13 +11,13 @@
 
 
 <div class="wrap">
-  
- 
+
+
   <!------ Include the above in your HEAD tag ---------->
 
- 
+
   <div class="container">
-   
+
     {% if type == 'updatedetail' %}
 
     <div class="card bg-light">
@@ -86,7 +86,7 @@
 
             </div>
           </div>
-    
+
           <div class="form-group">
             <div class="custom-control custom-radio custom-control-inline">
               <input name="gender" value="Male" type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
@@ -103,13 +103,32 @@
             <label for="inputAddress2">Address {{forloop.counter}}</label>
             <input name="address_street" type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" value="{{address.street}}">
           </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="inputCity">City</label>
+              <input name="city" type="text" class="form-control" id="inputCity" value="{{address.city}}">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputState">State</label>
+              <select name="state" id="inputState" class="form-control">
+                <option value="{{address.state}}" selected>udaipur</option>
+                <option value="West bengal">West bengal</option>
+                <option value="jammu and kashmir">jammu and kashmir</option>
+                <option value="haryana">haryana</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputZip">Zip</label>
+              <input name="zip_code" type="text" class="form-control" id="inputZip" value="{{address.zip_code}}">
+            </div>
+          </div>
           {% endfor %}
           {% else %}
           <div class="form-group">
             <label for="inputAddress2">Address {{forloop.counter}}</label>
             <input name="address_street" type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" value="{{address.street}}">
           </div>
-          {% endif %}
 
           <div class="form-row">
             <div class="form-group col-md-4">
@@ -130,7 +149,10 @@
               <input name="zip_code" type="text" class="form-control" id="inputZip" value="{{request.user.address_set.all.0.zip_code}}">
             </div>
           </div>
-          
+          {% endif %}
+
+
+
 
           <button type="submit" class="btn btn-primary">Update details</button>
           <!-- form-group// -->
@@ -178,17 +200,17 @@
 
             </div>
           </div>
-          
+
          <div class="form-row">
            <div class="col-md-10">
 
             <label for="ins_university_name"> Institute name</label>
             <div class="form-group input-group">
-            
+
               <div class="input-group-prepend">
                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
               </div>
-  
+
               <input
                 name="ins_university_name"
                 class="form-control"
@@ -232,13 +254,13 @@
            </div>
          </div>
          <div class="form-row">
-           
+
            {% for skills in seeker_skills %}
            <div class="col-md-4">
             <button class="btn btn-info mx-2">{{skills.skill_name}}<span class="badge badge-dark ">{{skills.skill_level}}</span></button><span><i class="fas fa-trash-alt delete_skill" data-attr={{skills.id}} style="cursor: pointer;"></i></span>
            </div>
            {% endfor %}
-           
+
          </div>
 
           <!-- Skill Modal -->
@@ -251,14 +273,14 @@
                 <div class="modal-body">
                   <div class="form-row main-contain">
                     <div class="col-md-5">
-          
+
                      <label for="ins_university_name"> Skill</label>
                      <div class="form-group input-group">
-           
+
                        <input name="skill_name" type="text" class="form-control skill_name" placeholder="skill name">
                      </div>
                     </div>
-          
+
                     <div class="col-md-5">
                       <label for="ins_university_name"> Skill level</label>
                       <select name="skill_level" class="custom-select">
@@ -300,7 +322,7 @@
     {% else %}
 
 
-    
+
 
     <div class="card bg-light">
       <article class="card-body mx-auto">
@@ -308,13 +330,13 @@
 
         <form action="" method="POST">
           {% csrf_token %}
-        
+
 
           <div class="form-row">
             <div class="col-md-6">
               <label for="job_title">Job title</label>
                 <div class="form-group input-group">
-                
+
                   <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                   </div>
@@ -328,13 +350,13 @@
                   />
 
             </div>
-            
-          
+
+
           </div>
           <div class="col-md-6">
             <label for="company_name"> Company name </label>
               <div class="form-group input-group">
-              
+
                 <div class="input-group-prepend">
                   <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                 </div>
@@ -349,13 +371,13 @@
 
           </div>
         </div>
-          
+
           </div>
-        
+
           <div class="form-row">
             <div class="col-md-8">
               <div class="form-group input-group">
-                   
+
                 <div class="form-group">
                     <label for="description">Job description</label>
                     <textarea
@@ -371,7 +393,7 @@
 
             </div>
           </div>
-          
+
 
           <div class="form-row my-3">
             <div class="col-md-6">
@@ -385,8 +407,8 @@
               />
             </div>
             <div class="col-md-6">
-  
-  
+
+
               <label for="completion_date">completion_date</label>
               <input
                 name="completion_date"
@@ -426,5 +448,5 @@
 
 {% block scripts %}
   <script src="{% static 'js/update_details.js' %}"></script>
- 
+
 {% endblock %}

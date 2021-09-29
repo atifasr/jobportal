@@ -25,6 +25,8 @@ def dashboard_data(request):
     if request.method == 'GET':
         applicants = JobPostActivity.objects.filter(job_post__job_posters = request.user)
         job_posts = JobPost.objects.filter(job_posters = request.user)
+        
+        print('appllicant ',applicants)
         print(job_posts)
         resp = {}
         resp['status'] = 'working'

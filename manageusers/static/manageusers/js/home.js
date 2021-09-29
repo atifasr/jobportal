@@ -26,27 +26,27 @@ SubscribeButton.on('click',function(){
     $.ajax(
         {
             url:'/sub_emailalert/',
-                method : 'GET',
-                data : cred,
-                dataType: "json",
-                contentType: "application/json",
-                success :function(data){
-                    console.log(data)
-                    if (data.status == 'email_dublicated')
-                    {
-                        Displaynotify("email has already been updated !")
-                        
-                    }
-                    else if (data.status == 'updated')
-                    {
-                        Displaynotify("Email subscribed for news letter!")
-                    }
+            method : 'GET',
+            data : cred,
+            dataType: "json",
+            contentType: "application/json",
+            success :function(data){
+                console.log(data)
+                if (data.status == 'email_dublicated')
+                {
+                    Displaynotify("email has already been updated !")
+                    
                 }
-                ,
-                error:function(e){
-                    console.log(e)
+                else if (data.status == 'updated')
+                {
+                    Displaynotify("Email subscribed for news letter!")
+                }
+            }
+            ,
+            error:function(e){
+                console.log(e)
 
-                }
+            }
         }
     )
 })

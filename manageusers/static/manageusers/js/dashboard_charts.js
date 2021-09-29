@@ -1,8 +1,27 @@
-var ctx = document.getElementById('myChart').getContext('2d');
+
+$(document).ready(
+  function(e)
+  {
+    $.ajax(
+      {
+        url:'/dashboard_data/',
+        method : 'GET',
+        dataType: "json",
+        contentType: "application/json",
+        cache : false,
+        success : function(data){
+            console.log(data)
+        }
+      }
+    )
+  }
+)
 
 
 
-var myChart = new Chart(ctx, {
+let ctx = document.getElementById('myChart').getContext('2d');
+
+let myChart = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -46,9 +65,9 @@ let pieChart =  document.getElementById('pieChart').getContext('2d');
 
 const data = {
     labels: [
-      'Red',
-      'Blue',
-      'Yellow'
+      'rejected',
+      'selected',
+      'onhold'
     ],
     datasets: [{
       label: 'No of applicants',
@@ -95,7 +114,7 @@ const data2 = {
 
 const config2 = {
     type: 'line',
-    data: data,
+    data: data2,
   };
 
 

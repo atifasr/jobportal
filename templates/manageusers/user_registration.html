@@ -15,12 +15,12 @@ user registration
 <div class="row justify-content-center my-3">
   <div class="col-md-8">
 
-    <form action="" method="POST">
+    <form  action="" method="POST">
       {% csrf_token %}
       <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label for="user_type">Register As</label>
-          <select name="user_type" id="user_type">
+          <select class="form-control" name="user_type" id="user_type">
             <option value="HR">Recuriter</option>
             <option value="job_seeker">Job seeker</option>
           </select>
@@ -37,13 +37,6 @@ user registration
           <label for="inputPassword4">Password</label>
           <input name="password" type="password" class="form-control" id="inputPassword4" placeholder="Password">
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="inputAddress">Address</label>
-          <input name="address_street" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-        </div>
-
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -79,30 +72,40 @@ user registration
           <label name="gender" class="custom-control-label" for="customRadioInline2">Female</label>
         </div>
       </div>
-     
-      <div class="form-group">
-        <label for="inputAddress2">Address 2</label>
-        <input name="address_street" type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="inputCity">City</label>
-          <input name="city" type="text" class="form-control" id="inputCity">
+      <div class="row">
+        <div class="col-md-12">
+          <i class="fa fa-plus btn btn-secondary add_addresstab" aria-hidden="true" style="cursor: pointer;"></i>
         </div>
+      </div>
+      <div class="form-row address-container">
         <div class="form-group col-md-4">
-          <label for="inputState">State</label>
-          <select name="state" id="inputState" class="form-control">
-            <option value="udaipur" selected>udaipur</option>
-            <option value="West bengal">West bengal</option>
-            <option value="jammu and kashmir">jammu and kashmir</option>
-            <option value="haryana">haryana</option>
-          </select>
+          <label for="inputAddress">Address</label>
+          <input name="address_street" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
         </div>
-        <div class="form-group col-md-2">
-          <label for="inputZip">Zip</label>
-          <input name="zip_code" type="text" class="form-control" id="inputZip">
+        <div class="form-group col-md-8">
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="inputCity">City</label>
+              <input name="city" type="text" class="form-control" id="inputCity">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputState">State</label>
+              <select name="state" id="inputState" class="form-control">
+                <option value="udaipur" selected>udaipur</option>
+                <option value="West bengal">West bengal</option>
+                <option value="jammu and kashmir">jammu and kashmir</option>
+                <option value="haryana">haryana</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputZip">Zip</label>
+              <input name="zip_code" type="text" class="form-control" id="inputZip">
+            </div>
+          </div>
         </div>
+
       </div>
+     
       
       <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
@@ -125,4 +128,8 @@ user registration
   </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'manageusers/js/add_address.js' %}"></script>
 {% endblock %}

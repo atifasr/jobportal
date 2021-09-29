@@ -1,5 +1,6 @@
 
 
+import json
 from django.contrib import messages
 from django.utils import tree
 from companyprofile.models import CompanyImage
@@ -38,7 +39,7 @@ def create_job(request):
 
         # create job skills if not already present inside DB
 
-        print(skill_names)
+
         skill_list = []
         for skill in skill_names:
             skill_nam, created = Skillset.objects.get_or_create(skill_name__iexact=skill,defaults={
@@ -60,10 +61,16 @@ def create_job(request):
         #skill_list has skill names job level has skill level required
         job_skill_set = []
         for job_skill_name, job_level in zip(skill_list, job_skill_):
-            job_skillset = Job_Skillset(skill_name=job_skill_name,job_post=job_pst, skill_level=job_level)
-            job_skill_set.append(job_skillset)
 
+            job_skill_set.append(
+                Job_Skillset(
+                    skill_name=job_skill_name,
+                    job_post=job_pst, 
+                    skill_level=job_level
+                    )
+                )
         Job_Skillset.objects.bulk_create(job_skill_set)
+        
         messages.add_message(request,messages.SUCCESS,'Job post successfully submitted!')
         return redirect('/dashboard/')
 
@@ -87,7 +94,6 @@ def job_det(request, job_id):
         try:
             applied_user = JobPostActivity.objects.get(
                 user=request.user, job_post__id=job_id)
-            print(applied_user)
             applied = True
 
         except(ObjectDoesNotExist):
@@ -101,7 +107,6 @@ def job_det(request, job_id):
 def companydetails(request):
     if request.method == 'GET':
         filter_ = request.GET.get('id')
-        print(filter_)
         cmpny = Company.objects.get(id=filter_)
         cmpny_images = CompanyImage.objects.filter(company__id=filter_)
         context = {
@@ -128,8 +133,8 @@ def apply_job(request, job_id):
         except ObjectDoesNotExist:
             if SeekerProfile.DoesNotExist:
                 messages.add_message(request,messages.INFO,'Kindly add the profile first')
-        print(request.META['HTTP_REFERER'])
-        return redirect('/dashboard/')
+
+        return redirect(request.META['HTTP_REFERER'])
 
 
 def manage_jobs(request):
@@ -146,12 +151,12 @@ def manage_jobs(request):
 def update_post(request, job_id):
 
     job_post = JobPost.objects.get(id=job_id)
-    print('jobpost',job_post)
+
     try:
         job_location = JobLocation.objects.get(job = job_post)
     except ObjectDoesNotExist:
         job_location = JobLocation()
-        print('no address found')
+   
     if request.method == 'POST':
         job_post.job_title = request.POST.get('title')
         company_name = request.POST.get('company_name')
@@ -250,6 +255,8 @@ def saved_jobs(request):
         return render(request,"manageusers/saved_jobs.html",context)
 
 
+
+
 from django.db.utils import IntegrityError
 def sub_emailalert(request):
     if request.method == "GET":
@@ -266,3 +273,19 @@ def sub_emailalert(request):
            resp['status'] = 'email_error'
 
         return JsonResponse(resp,safe=False)
+
+from django.views.decorators.csrf import csrf_exempt
+
+#apply for scrapped jobs
+@csrf_exempt
+def apply_job(request):
+    if request.method == "POST":
+        resp ={}
+        job_id = json.loads(request.body.decode('utf-8'))['job_id']
+        job_post = JobPost.objects.get(id= job_id)
+        JobPostActivity.objects.create(
+            user = request.user,
+            job_post = job_post,
+        )
+        resp['status'] = 'applied'
+    return JsonResponse(resp,safe=False)

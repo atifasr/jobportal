@@ -52,10 +52,11 @@ def home(request):
     if request.method == 'GET':
         objects = JobPost.objects.all().order_by('-created_date')
         
-        p = Paginator(objects, 18)
+        p = Paginator(objects, 14)
         if request.GET.get('page_num'):
             page_num = request.GET.get('page_num')
             jobs = p.page(page_num).object_list
+
         else:
             jobs = p.page(1).object_list 
             
@@ -65,16 +66,16 @@ def home(request):
         })
 
 
-def get_page():
-    if request.method == 'GET':
-        jobs = JobPost.objects.all()
-        p = Paginator(jobs, 6)
-        pag_no = request.GET.get('page_num')
-        print(p.num_pages)
-        return render(request, 'manageusers/home.html', context={
-            'jobs': p.page(pag_no).object_list,
-            'page': p,
-        })
+# def get_page():
+#     if request.method == 'GET':
+#         jobs = JobPost.objects.all()
+#         p = Paginator(jobs, 6)
+#         pag_no = request.GET.get('page_num')
+#         print(p.num_pages)
+#         return render(request, 'manageusers/home.html', context={
+#             'jobs': p.page(pag_no).object_list,
+#             'page': p,
+#         })
 
 
 @csrf_exempt
@@ -89,31 +90,36 @@ def user_reg(request):
         password = request.POST.get('password')
         user_type = request.POST.get('user_type')
 
-        user = User(gender=gender, email=email, first_name=first_name,
-                    last_name=last_name, date_of_birth=date_of_birth, contact_no=contact_no,user_type=user_type)
+        user = User(
+            gender=gender, 
+            email=email, 
+            first_name=first_name,
+            last_name=last_name, 
+            date_of_birth=date_of_birth, 
+            contact_no=contact_no,
+            user_type=user_type
+            )
         user.set_password(password)
         user.save()
 
-        city = request.POST.get('city')
-        state = request.POST.get('state')
-        zip_code = request.POST.get('zip_code')
+        city = request.POST.getlist('city')
+        state = request.POST.getlist('state')
+        zip_code = request.POST.getlist('zip_code')
         address_street = request.POST.getlist('address_street')
-        print(user)
-        print(state)
+        
         address_obj_list = []
-        print(address_obj_list)
-        for value in address_street:
-            print('inside loop')
+        for index,value in enumerate(address_street):
+
             address_obj_list.append(Address(
                 user = user,
                 street = value,
-                city= city,
-                state = state,
-                zip_code =zip_code
+                city= city[index],
+                state = state[index],
+                zip_code =zip_code[index]
             )
             )
         Address.objects.bulk_create(address_obj_list)
-
+        
         return redirect('/login/')
     return render(request, 'manageusers/user_registration.html')
 
@@ -131,7 +137,7 @@ def login_(request):
                 login(request, user=user)
                 log = UserLog(user=user, last_login_date=datetime.now())
                 log.save()
-                return redirect('/dashboard/')
+                return redirect('/')
             else:
                 messages.add_message(request,messages.WARNING,'Check username or password!')
                 return redirect('/login/')
@@ -181,9 +187,9 @@ def dashboard(request):
                     profile__user=request.user)
                 print(applied_posts)
             except ObjectDoesNotExist:
+                print('calling from here')
 
                 if SeekerProfile.DoesNotExist:
-                    print(' No seeker object')
                     seeker_profile = None
 
                 if JobPostActivity.DoesNotExist:
@@ -220,7 +226,6 @@ def search_func(request):
         filter_srch = request.GET.get('search_text')
         filter_type = request.GET.get('filter')
         context = {}
-
         if filter_type == 'title':
         #    search by title
             fltrd_obj = JobPost.objects.filter(
@@ -245,7 +250,7 @@ def search_func(request):
             jobs = p.page(1).object_list 
 
         context['jobs'] = jobs
-        messages.success(request,messages.INFO, "Matching results")
+        messages.add_message(request,messages.INFO, f"{jobs.count()} Matching results")
 
         return render(request, 'manageusers/home.html', context)
 

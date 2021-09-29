@@ -46,7 +46,7 @@
           <div class="form-row">
             <div class="col-md-8">
               <label for="description">Description</label>
-              <textarea name="description" id="" class="form-control" cols="30" rows="3"></textarea>
+              <textarea name="description" id="" class="form-control" cols="30" rows="3">{{prof.description}}</textarea>
             </div>
           </div>
           <div class="form-row">
@@ -97,13 +97,19 @@
               <label name="gender" class="custom-control-label" for="customRadioInline2">Female</label>
             </div>
           </div>
+          {% if request.user.address_set.all.exists %}
           {% for address in request.user.address_set.all %}
           <div class="form-group">
             <label for="inputAddress2">Address {{forloop.counter}}</label>
             <input name="address_street" type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" value="{{address.street}}">
           </div>
-          
           {% endfor %}
+          {% else %}
+          <div class="form-group">
+            <label for="inputAddress2">Address {{forloop.counter}}</label>
+            <input name="address_street" type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" value="{{address.street}}">
+          </div>
+          {% endif %}
 
           <div class="form-row">
             <div class="form-group col-md-4">

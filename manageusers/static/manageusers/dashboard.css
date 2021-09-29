@@ -20,6 +20,7 @@
 .recent_applies{
   margin-left: 20%;
   height: 40vh;
+  box-shadow: 3px 3px grey;
 }
 
 
@@ -31,5 +32,22 @@
 /* Hr dashboard tiles */
 
 .card_tiles{
+  border-radius: 2%;
+  cursor: pointer;
+  box-shadow: 3px 3px grey;
+  padding: 4%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card_tiles a{
+  text-decoration: none;
+  color: inherit;
+}
+
+.chart_bar{
+  background-color: whitesmoke;
+  box-shadow: 3px 3px grey;
+  padding: 1%;
   border-radius: 2%;
 }

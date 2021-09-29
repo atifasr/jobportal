@@ -21,7 +21,7 @@ from django.http.response import JsonResponse
 @csrf_exempt
 def update_details(request):
     try:
-        prof = SeekerProfile.objects.get(user= request.user)
+        prof = SeekerProfile.objects.get(user = request.user)
     except SeekerProfile.DoesNotExist:
         prof = None
     if request.method == "POST":
@@ -30,14 +30,12 @@ def update_details(request):
         try:
             user = SeekerProfile.objects.get(user=request.user)
         except (ObjectDoesNotExist):
-            print('from exception')
             user = SeekerProfile()
 
         # updating users profile
         curr_user.first_name = request.POST['first_name']
         curr_user.last_name = request.POST['last_name']
         curr_user.contact_no = request.POST.get('contact_no')
-        curr_user.description = request.POST.get('description')
         curr_user.date_of_birth = request.POST.get('date_of_birth')
         curr_user.gender = request.POST.get('gender')
         curr_user.save()
@@ -47,25 +45,31 @@ def update_details(request):
         user.user = curr_user
         user.first_name = curr_user.first_name
         user.last_name = curr_user.last_name
+        user.description = request.POST.get('description')
         user.resume = request.FILES.get('resume')
-        print(request.FILES.get('photo'))
         user.photo = request.FILES.get('photo')
+        user.save()
 
-        city = request.POST.get('city')
-        state = request.POST.get('state')
-        zip_code = request.POST.get('zip_code')
+
+        #updating address
+        city = request.POST.getlist('city')
+        state = request.POST.getlist('state')
+        zip_code = request.POST.getlist('zip_code')
         address_street = request.POST.getlist('address_street')
 
 
         try:
-            user_address = Address.objects.filter(user = curr_user)
+            user_address = Address.objects.filter(user = request.user)
+            print(user_address)
             for index,address in enumerate(address_street):
+                print(index)
                 user_address[index].street = address
-                user_address[index].city = city
-                user_address[index].zip_code = zip_code
-                user_address[index].state = state
+                user_address[index].city = city[index]
+                user_address[index].zip_code = zip_code[index]
+                user_address[index].state = state[index]
                 user_address[index].save()
         except Address.DoesNotExist:
+            print('there was not address ')
             address_obj_list = []
             for value in address_street:
                 address_obj_list.append(Address(
@@ -78,7 +82,7 @@ def update_details(request):
                 )
             Address.objects.bulk_create(address_obj_list)
 
-        user.save()
+        
 
         messages.add_message(request,messages.INFO,'Details updated'.capitalize())
         return redirect('/dashboard/')

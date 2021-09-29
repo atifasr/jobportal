@@ -1,5 +1,5 @@
 
-let createJobButton = document.getElementsByClassName('create_job')[0]
+let createJobButton = document.querySelector('.create_job')
 
 
 
@@ -11,7 +11,7 @@ let createSkillDiv = ()=>{
     
     let secondDiv = $("<div></div>").addClass("col-md-6 mt-2").append(
         $("<select></select>").addClass("form-control").attr({
-            "for":"job_skill_name"
+            "for":"job_skill_name","name":"job_skill_level"
         }).append(
             $("<option></option>").attr({"value":"beginner"}).text('beginner'),
             $("<option></option>").attr({"value":"intermediate"}).text('intermediate'),
@@ -25,14 +25,17 @@ let createSkillDiv = ()=>{
 
 
 
-let count = 0
+let count_skillbar = 0
 $(createJobButton).on('click',function(e){
-
-    if (count < 2)
+    console.log('clicked')
+    if (count_skillbar < 2)
     {
         createSkillDiv()
-        console.log('skill bar added')
     }
-    count += 1
-    console.log('clicked')
+    count_skillbar += 1
+   
 })
+
+
+
+

@@ -12,6 +12,22 @@
 {% block content %}
 
 {% if user.user_type == 'HR' %}
+<div class="row">
+  <div class="col-md-10">
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show my-3" role="alert">
+          <strong>{{ message }}</strong> 
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    </ul>
+    {% endif %} 
+  </div>
+</div>
 <div class="row justify-content-center">
   <div class="col-md-12">
     <div name="recruiter" class="row recruiter my-3 justify-content-center">
@@ -20,16 +36,9 @@
         <a href="{% url 'jobmanage:create-job' %}" class="btn btn-secondary mx-2 my-2"
           >Create a Job Post</a
         >
-    
-        <a href="{% url 'jobmanage:sort-listed' %}" class="btn btn-secondary mx-2 my-2">
-            Shortlisted<span class="badge badge-light mx-2">4</span>
+        <a href="" class="btn btn-secondary mx-2 my-2">
+            edit profile
           </a>
-    
-        <a href="{% url 'jobmanage:manage-jobs' %}" class="btn btn-secondary mx-2 my-2">Total Jobs Posted<span class="badge badge-light mx-2">{{created_posts.count}}</span></a>
-        
-        <a href="{% url 'jobmanage:manage-applic' %}" class="btn btn-secondary mx-2 my-2">
-            Manage Applicants<span class="badge badge-light mx-2"
-              >{{applicants.count}}</span></a>
       </div>
     
       <div class="row">
@@ -41,44 +50,26 @@
         <div class="row my-3">
           <div class="col-md-8 p-1">
             <div class="row">
-              <div class="col-md-3 mb-3">
+              <div class="col-md-4 mb-3">
                 <div class="card card_tiles">
-                  <h5 class="card-title">Title</h5>
-                  <p class="card-text">Content</p>
+                  <h5 class="card-title"><a href="{% url 'jobmanage:manage-jobs' %}">Total Jobs Posted</a></h5>
+                  <p class="card-text"><span class="badge badge-primary mx-2">{{created_posts.count}}</span></p>
                 </div>
               </div>
-              <div class="col-md-3 mb-3">
+              <div class="col-md-4 mb-3">
                 <div class="card card_tiles">
-                  <h5 class="card-title">Title</h5>
-                  <p class="card-text">Content</p>
-                </div>
-
-              </div>
-              <div class="col-md-3 mb-2">
-                <div class="card card_tiles">
-                  <h5 class="card-title">Title</h5>
-                  <p class="card-text">Content</p>
+                  <h5 class="card-title"><a href="{% url 'jobmanage:manage-applic' %}">Manage Applicants</a></h5>
+                  <p class="card-text"><span class="badge badge-primary mx-2"
+                    >{{applicants.count}}</span></p>
                 </div>
 
               </div>
-              <div class="col-md-3 mb-2">
+              <div class="col-md-4 mb-2">
                 <div class="card card_tiles">
-                  <h5 class="card-title">Title</h5>
-                  <p class="card-text">Content</p>
-                </div>
-
-              </div>
-              <div class="col-md-3 mb-2">
-                <div class="card card_tiles">
-                  <h5 class="card-title">Title</h5>
-                  <p class="card-text">Content</p>
-                </div>
-
-              </div>
-              <div class="col-md-3 mb-2">
-                <div class="card card_tiles">
-                  <h5 class="card-title">Title</h5>
-                  <p class="card-text">Content</p>
+                  <h5 class="card-title"><a href="{% url 'jobmanage:sort-listed' %}">
+                    Shortlisted
+                  </a></h5>
+                  <p class="card-text"><span class="badge badge-primary mx-2">4</span></p>
                 </div>
 
               </div>
@@ -109,14 +100,14 @@
 
           <!-- row for charts and graphs  -->
       <div class="row mt-2">
-        <div class="col-md-8">
-          <div class="row justify-content-center">
-            <div class="col-md-10" style="position: relative;">
-            <canvas id="myChart"></canvas>
-            </div>
+        <div class="col-md-7 chart_bar mb-3">
+            <div class="row justify-content-center">
+              <div class="col-md-10" style="position: relative;">
+              <canvas id="myChart"></canvas>
+              </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 chart_bar mb-3 mx-auto">
             <div class="row justify-content-center">
               <div class="col-md-10" style="position: relative;">
                 <canvas id="pieChart"></canvas>
@@ -152,7 +143,7 @@
 
       <div class="col-md-6">
        <div class="row">
-        <div class="col-md-12" style="position: relative;">
+        <div class="col-md-12 chart_bar" style="position: relative;">
           <canvas id="line_chart" >
                 
 
@@ -235,24 +226,16 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-8">
-            <p>
-              {% if request.user.seekerprofile.photo %}
+            {% if request.user.seekerprofile.photo %}
               <img class="img-fluid rounded prof_pic" src="{{ request.user.seekerprofile.photo.url }}" alt="">
               {% endif %}
-              {{request.user.seekerprofile.decription}}
+            <p>
+              {{seeker_profile.decription}}
             </p>
             
           </div>
         </div>
         <table class="table">
-          <thead>
-            <tr>
-              <th colspan="2">
-                Profile details
-              </th>
-            </tr>
-           
-          </thead>
           <tbody>
             <tr>
             

@@ -21,12 +21,14 @@
 .jobs_cards{
   width: 70%;
   cursor: pointer;
+  box-shadow: 3px 3px grey;
 }
 
 
 .recent_applicants{
   width: 80%;
   border-radius: 3%;
+  box-shadow: 3px 3px grey;
 }
 
 
@@ -44,9 +46,16 @@
 }
 
 .activate-btn{
-  margin-left: 50%;
+  margin-top: 3%;
+  margin:auto;
+  background-color: rgb(61, 59, 59);
+  border:none
 }
 
+
+.activate-btn:hover{
+  background-color: rgb(102, 96, 96);
+}
 .card-dropdown{
   margin-left: 90%;
 }

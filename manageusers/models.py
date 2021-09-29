@@ -71,7 +71,7 @@ class User(AbstractBaseUser):
 
     )
 
-    
+
 
     objects = UserManager()
 
@@ -106,7 +106,7 @@ class User(AbstractBaseUser):
         return messages_count
 
     def save(self, *args, **kwargs):
-        if self.email:
+        if self.email != None:
             self.username = self.email.split('@')[0]
         super().save(*args, **kwargs)
 
@@ -117,10 +117,10 @@ class User(AbstractBaseUser):
 
 class Address(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
-    city = models.CharField(max_length=10)
-    state = models.CharField(max_length=12,blank=True)
-    zip_code = models.CharField(max_length=12,blank=True)
-    street = models.CharField(max_length=255,blank=True)
+    city = models.CharField(max_length=25)
+    state = models.CharField(max_length=25,blank=True)
+    zip_code = models.CharField(max_length=25,blank=True)
+    street = models.TextField()
 
 
 
@@ -142,7 +142,7 @@ class MessageThreads(models.Model):
     created_time = models.TimeField(auto_now_add=True)
 
 
-    
+
 
 
 
@@ -155,6 +155,3 @@ class Messages(models.Model):
 
     def __str__(self):
         return f"{self.message[:10]}"
-
-
-
